@@ -1,0 +1,107 @@
+{% extends "base.html.twig" %}
+
+{% block title %}
+	NUMEO - CAP gratuit
+{% endblock %}
+
+{% block body %}
+	<main>
+		<section class="hero">
+			<div class="rvtxkohf">
+				<div class="tsbrnlgm objdfa53"></div>
+				<div class="w3r0kt3i">
+					<div class="kiaryinu">
+						<div class="w37qo3di">
+							<div class="ike71eyt"></div>
+						</div>
+						<div class="wcww60xq">
+							<h1 class="ha9s53ia">
+								L'IA et les nombres au coeur
+								<br>
+								<span class="vv01illv">de vos décisions d'accompagnement</span>
+							</h1>
+							<div class="doqxrg"></div>
+							<p class="tiguk3">
+								Des évaluations prédictives, équitables et validées scientifiquement — propulsées par l'IA.
+							</p>
+							<div class="doqxrg"></div>
+							{# Prévoir bouton #}
+						</div>
+					</div>
+				</div>
+			</div>
+		</section>
+		{# CAP gratuit avec hooks Stimulus + zone résultat => partial à prévoir #}
+		<div class="container py-5" data-controller="cap" data-cap-endpoint-value="{{ path('api_cap') }}">
+			<div class="row g-4">
+				<div class="col-lg-6">
+					<h1 class="display-6 mb-2">CAP gratuit</h1>
+					<p class="text-muted">
+						4 nombres, un aperçu rapide...
+					</p>
+
+					<div class="card shadow-sm">
+						<div class="card-body">
+							{{ form_start(capForm, {
+                        attr: {
+                        'data-cap-target': 'form',
+                        'data-action': 'submit->cap#submit'
+                        }
+                    }) }}
+							<div class="mb-3">
+								{{ form_label(capForm.firstNames) }}
+								{{ form_widget(capForm.firstNames, {
+                        attr: {
+                            'data-cap-target': 'firstNames',
+                            'data-action': 'blur->cap#normalize'
+                        }
+                        }) }}
+								{{ form_help(capForm.firstNames) }}
+								{{ form_errors(capForm.firstNames) }}
+							</div>
+
+							<div class="mb-3">
+								{{ form_label(capForm.lastName) }}
+								{{ form_widget(capForm.lastName, {
+                        attr: {
+                            'data-cap-target': 'lastName',
+                            'data-action': 'blur->cap#normalize'
+                        }
+                        }) }}
+								{{ form_help(capForm.lastName) }}
+								{{ form_errors(capForm.lastName) }}
+							</div>
+
+							<div class="mb-3">
+								{{ form_label(capForm.birthDate) }}
+								{{ form_widget(capForm.birthDate) }}
+								{{ form_errors(capForm.birthDate) }}
+							</div>
+
+							<button class="btn btn-primary w-100" type="submit" data-cap-target="submitBtn">
+								Calculer mon CAP
+							</button>
+
+							<div class="mt-3 small text-muted" data-cap-target="status"></div>
+
+							{{ form_end(capForm)}}
+						</div>
+					</div>
+				</div>
+				<div class="col-lg-6">
+					<div class="card shadow-sm h-100">
+						<div class="card-body">
+							<h2 class="h5 mb-3">Résultat</h2>
+
+                            <div data-cap-target="result" class="text-muted">
+                                Remplis le formulaire et lance le calcul
+                            </div>
+
+                            {# plus tard : le losange + explications courtes (cahier des charges CAP) :contentReference[oaicite:1]{index=1} #}
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</main>
+{% endblock %}

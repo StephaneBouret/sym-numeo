@@ -22,10 +22,6 @@
     font-display: swap;
 }
 
-/* body {
-    background-color: #FFFFFF;
-} */
-
 h1,
 h2,
 h3,
@@ -172,5 +168,129 @@ h6,
 @media (max-width: 992px) {
     .q6csu5 {
         align-items: flex-start;
+    }
+}
+
+/*--------------------------------------------------------------
+# HomePage
+--------------------------------------------------------------*/
+section,
+footer {
+    position: relative;
+    z-index: 1;
+    overflow-x: clip;
+}
+
+.rvtxkohf {
+    padding-right: 3rem;
+    padding-left: 3rem;
+}
+
+.tsbrnlgm {
+    pointer-events: none;
+    height: 0;
+    padding: 4rem 0 0;
+}
+
+.objdfa53 {
+    padding-top: 8rem;
+}
+
+.w3r0kt3i {
+    width: 100%;
+    max-width: 79rem;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.kiaryinu {
+    grid-column-gap: 1.5rem;
+    grid-row-gap: 1.5rem;
+    display: flex;
+}
+
+.w37qo3di {
+    flex: 1;
+    max-width: 12rem;
+    padding-top: .75rem;
+    padding-bottom: .75rem;
+}
+
+.ike71eyt {
+    grid-column-gap: .75rem;
+    grid-row-gap: .75rem;
+    justify-content: flex-start;
+    align-items: flex-start;
+    display: flex;
+}
+
+.wcww60xq {
+    flex: 1;
+    max-width: 52rem;
+}
+
+.ha9s53ia {
+    font-size: 4rem;
+    line-height: 1.1;
+    font-weight: 600;
+    letter-spacing: -.12rem;
+    margin-bottom: 0;
+    white-space: normal;
+    overflow-wrap: normal;
+    word-break: normal;
+}
+
+.vv01illv {
+    color: #757575;
+    display: inline;
+}
+
+.doqxrg {
+        pointer-events: none;
+    padding-top: 2rem;
+}
+
+.tiguk3 {
+    font-size: 1.25rem;
+    line-height: 1.2;
+    letter-spacing: 0px;
+    margin-bottom: 0;
+}
+
+@media (max-width: 991px) {
+    .kiaryinu {
+        flex-flow: column;
+    }
+
+    .w37qo3di {
+        padding-top: 0;
+        padding-bottom: 0;
+    }
+}
+
+@media (max-width: 768px) {
+    .rvtxkohf {
+        padding-right: 1rem;
+        padding-left: 1rem;
+    }
+
+    .objdfa53 {
+        padding-top: 4rem;
+    }
+
+    .ha9s53ia {
+        font-size: 3rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .objdfa53 {
+        padding-top: 3rem;
+    }
+}
+
+@media (max-width: 425px) {
+    .ha9s53ia {
+        font-size: 2.5rem;
     }
 }
