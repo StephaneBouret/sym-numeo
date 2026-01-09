@@ -1,7 +1,7 @@
 import { Controller } from '@hotwired/stimulus';
 
 export default class extends Controller {
-  static targets = ['form', 'firstNames', 'lastName', 'result', 'status', 'submitBtn'];
+  static targets = ['form', 'firstNames', 'lastName', 'result', 'status', 'submitBtn', 'aspirationValue', 'expressionValue', 'axeValue', 'vigilanceValue'];
   static values = { endpoint: String };
 
   normalize() {
@@ -51,14 +51,18 @@ export default class extends Controller {
 
   renderResult(data) {
     // MVP : rendu simple (on passera au losange ensuite)
-    this.resultTarget.innerHTML = `
-      <div class="d-flex flex-column gap-2">
-        <div><strong>Chemin/Aspiration :</strong> ${data.aspiration}</div>
-        <div><strong>Expression :</strong> ${data.expression}</div>
-        <div><strong>Axe :</strong> ${data.axe}</div>
-        <div><strong>Point de vigilance :</strong> ${data.vigilance}</div>
-      </div>
-    `;
+    // this.resultTarget.innerHTML = `
+    //   <div class="d-flex flex-column gap-2">
+    //     <div><strong>Chemin/Aspiration :</strong> ${data.aspiration}</div>
+    //     <div><strong>Expression :</strong> ${data.expression}</div>
+    //     <div><strong>Axe :</strong> ${data.axe}</div>
+    //     <div><strong>Point de vigilance :</strong> ${data.vigilance}</div>
+    //   </div>
+    // `;
+    this.aspirationValueTarget.textContent = data.aspiration ?? '—';
+    this.expressionValueTarget.textContent = data.expression ?? '—';
+    this.axeValueTarget.textContent = data.axe ?? '—';
+    this.vigilanceValueTarget.textContent = data.vigilance ?? '—';
   }
 
   setStatus(msg) {

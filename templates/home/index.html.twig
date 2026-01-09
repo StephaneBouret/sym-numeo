@@ -93,11 +93,38 @@
 						<div class="card-body">
 							<h2 class="h5 mb-3">Résultat</h2>
 
-                            <div data-cap-target="result" class="text-muted">
-                                Remplis le formulaire et lance le calcul
-                            </div>
-
-                            {# plus tard : le losange + explications courtes (cahier des charges CAP) :contentReference[oaicite:1]{index=1} #}
+							<div
+								data-cap-target="result" class="text-muted">
+								{# Remplis le formulaire et lance le calcul #}
+								<div class="cap-diamond cap-diamond--fluid">
+									<div class="circle c-top">
+										<span data-cap-target="aspirationValue">—</span>
+									</div>
+									{# Traits hauts #}
+									<div class="cap-line cap-line--top-left"></div>
+									<div class="cap-line cap-line--top-right"></div>
+									{# Tige haut #}
+									<div class="stem stem-top" aria-hidden="true"></div>
+									{# Losange central #}
+									<div class="kite">
+										<div class="tri tri-up">
+											<span data-cap-target="axeValue">—</span>
+										</div>
+										<div class="tri tri-down">
+											<span data-cap-target="vigilanceValue">—</span>
+										</div>
+									</div>
+									{# Tige basse #}
+									<div class="stem stem-bottom" aria-hidden="true"></div>
+									{# Traits bas #}
+									<div class="cap-line cap-line--bottom-left"></div>
+									<div class="cap-line cap-line--bottom-right"></div>
+									{# Cercle bas #}
+									<div class="circle c-bottom">
+										<span data-cap-target="expressionValue">—</span>
+									</div>
+								</div>
+							</div>
 						</div>
 					</div>
 				</div>

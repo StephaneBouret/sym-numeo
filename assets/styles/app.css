@@ -246,7 +246,7 @@ footer {
 }
 
 .doqxrg {
-        pointer-events: none;
+    pointer-events: none;
     padding-top: 2rem;
 }
 
@@ -256,6 +256,78 @@ footer {
     letter-spacing: 0px;
     margin-bottom: 0;
 }
+
+/* .cap-diamond-wrap {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+} */
+
+/* .cap-diamond {
+    position: relative;
+    width: min(360px, 100%);
+    aspect-ratio: 1 / 1;
+} */
+
+/* .cap-diamond::before {
+    content: "";
+    position: absolute;
+    inset: 14%;
+    border: 2px solid var(--bs-border-color);
+    border-radius: 14px;
+    transform: rotate(45deg);
+    opacity: .65;
+} */
+
+/* .cap-node {
+    position: absolute;
+    width: 34%;
+    text-align: center;
+}
+
+.cap-badge {
+    width: 72px;
+    height: 72px;
+    margin: 0 auto;
+    border-radius: 999px;
+    display: grid;
+    place-items: center;
+    font-weight: 800;
+    font-size: 1.6rem;
+    background: var(--bs-body-bg);
+    border: 2px solid var(--bs-border-color);
+    box-shadow: var(--bs-box-shadow-sm);
+}
+
+.cap-label {
+    margin-top: .35rem;
+    font-size: .9rem;
+    color: var(--bs-secondary-color);
+}
+
+.cap-node--top {
+    top: 0;
+    left: 50%;
+    transform: translateX(-50%);
+} */
+
+/* .cap-node--right {
+    top: 50%;
+    right: 0;
+    transform: translateY(-50%);
+}
+
+.cap-node--bottom {
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+}
+
+.cap-node--left {
+    top: 50%;
+    left: 0;
+    transform: translateY(-50%);
+} */
 
 @media (max-width: 991px) {
     .kiaryinu {
@@ -292,5 +364,208 @@ footer {
 @media (max-width: 425px) {
     .ha9s53ia {
         font-size: 2.5rem;
+    }
+}
+
+/* @media (max-width: 420px) {
+    .cap-badge {
+        width: 62px;
+        height: 62px;
+        font-size: 1.4rem;
+    }
+} */
+
+/* --------------------------------------------------------------
+# CAP Diamond
+-------------------------------------------------------------- */
+.cap-diamond.cap-diamond--fluid {
+    position: relative;
+    width: min(420px, 100%);
+    aspect-ratio: 9 / 14;
+    margin: 0 auto;
+    overflow: hidden;
+
+    /* Couleurs */
+    --blueCircle: #121949;
+    --greenCircle: #5BAE8E;
+    --sinopiaCircle: #D0330E;
+    --pink: #DD8A8A;
+
+    --topCircle: var(--blueCircle);
+    --bottomCircle: var(--sinopiaCircle);
+
+    /* Traits losange */
+    --stroke: 10px;
+    --strokeRadius: 999px;
+
+    /* typo */
+    --txt: #FFF;
+
+    --pivot-y: 41%;
+    /* point de rencontre des 4 obliques */
+    --line-thickness: 10px;
+    --line-radius: 999px;
+
+    --top-line-length: 50%;
+    --bottom-line-length: 50%;
+}
+
+/* Neutralise l'ancien ::before du losange "simple" */
+.cap-diamond.cap-diamond--fluid::before {
+    content: none;
+}
+
+/* Trait générique */
+.cap-line {
+    position: absolute;
+    left: 50%;
+    width: var(--line-thickness);
+    border-radius: var(--line-radius);
+}
+
+/* Trait haut */
+.cap-line--top-left,
+.cap-line--top-right {
+    top: 10%;
+    height: var(--top-line-length);
+    transform-origin: top center;
+    background: linear-gradient(to bottom,
+            rgba(18, 25, 73, 0.95),
+            rgba(91, 174, 142, 0.95));
+}
+
+.cap-line--top-left {
+    transform: translateX(-50%) rotate(-35deg);
+}
+
+.cap-line--top-right {
+    transform: translateX(-50%) rotate(35deg);
+}
+
+/* ---------- BAS ---------- */
+.cap-line--bottom-left,
+.cap-line--bottom-right {
+    top: var(--pivot-y);
+    /* <-- pivot commun = elles se rejoignent */
+    height: var(--bottom-line-length);
+    transform-origin: bottom center;
+    background: linear-gradient(to bottom,
+            rgba(221, 138, 138, 0.95),
+            rgba(208, 51, 14, 0.95));
+}
+
+.cap-line--bottom-left {
+    transform: translateX(-50%) rotate(35deg);
+}
+
+.cap-line--bottom-right {
+    transform: translateX(-50%) rotate(-35deg);
+}
+
+/* Cercles haut/bas */
+.cap-diamond--fluid .circle {
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 22%;
+    aspect-ratio: 1 / 1;
+    border-radius: 50%;
+    display: grid;
+    place-items: center;
+    color: var(--txt);
+    z-index: 5;
+}
+
+.cap-diamond--fluid .circle span {
+    font-family: "DidactGothic", "Roboto", sans-serif;
+    font-size: clamp(2.2rem, 5vw, 4.2rem);
+    font-weight: 500;
+    line-height: 1;
+}
+
+.cap-diamond--fluid .c-top {
+    top: 3%;
+    background-color: var(--topCircle);
+}
+
+.cap-diamond--fluid .c-bottom {
+    bottom: 3%;
+    background-color: var(--bottomCircle);
+}
+
+/* Tiges verticales */
+.cap-diamond--fluid .stem {
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 2.2%;
+    border-radius: 999px;
+    z-index: 4;
+}
+
+.cap-diamond--fluid .stem-top {
+    top: 15%;
+    height: 25%;
+    background: linear-gradient(to bottom,
+            rgba(18, 25, 73, .95),
+            rgba(91, 174, 142, .95));
+}
+
+.cap-diamond--fluid .stem-bottom {
+    bottom: 15%;
+    height: 25%;
+    background: linear-gradient(to bottom,
+            rgba(221, 138, 138, .95),
+            rgba(208, 51, 14, .95));
+}
+
+/* Losange central (2 triangles) */
+.cap-diamond--fluid .kite {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    width: 34%;
+    height: 30%;
+    z-index: 6;
+}
+
+.cap-diamond--fluid .tri {
+    position: absolute;
+    left: 0;
+    right: 0;
+    display: grid;
+    place-items: center;
+    color: var(--txt);
+}
+
+.cap-diamond--fluid .tri span {
+    font-family: "DidactGothic", "Roboto", sans-serif;
+    font-size: clamp(2.2rem, 5vw, 4.2rem);
+    font-weight: 500;
+    line-height: 1;
+}
+
+.cap-diamond--fluid .tri-up {
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 50%;
+    background: var(--greenCircle);
+    clip-path: polygon(50% 0%, 0% 100%, 100% 100%);
+}
+
+.cap-diamond--fluid .tri-down {
+    top: 50%;
+    left: 0;
+    right: 0;
+    height: 50%;
+    background: var(--pink);
+    clip-path: polygon(0% 0%, 100% 0%, 50% 100%);
+}
+
+@media (max-width: 420px) {
+    .cap-diamond.cap-diamond--fluid {
+        --stroke: 8px;
     }
 }
