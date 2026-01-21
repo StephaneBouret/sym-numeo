@@ -87,6 +87,18 @@
 							{{ form_end(capForm)}}
 						</div>
 					</div>
+					<div class="card shadow-sm mt-4 d-none" data-cap-target="narrativeCard">
+						<div class="card-body">
+							<h3 class="h5 mb-2">Aspiration</h3>
+							<div data-cap-target="aspirationText" class="small text-body-secondary mb-2"></div>
+
+							<h3 class="h5 mb-2">Expression</h3>
+							<div data-cap-target="expressionText" class="small text-body-secondary mb-2"></div>
+
+							<h3 class="h5 mb-2">Dynamique Aspiration / Expression</h3>
+							<div data-cap-target="pairText" class="small text-body-secondary"></div>
+						</div>
+					</div>
 				</div>
 				<div class="col-lg-6">
 					<div class="card shadow-sm h-100">
@@ -97,7 +109,7 @@
 								data-cap-target="result" class="text-muted">
 								{# Remplis le formulaire et lance le calcul #}
 								<div class="cap-diamond cap-diamond--fluid">
-									<div class="circle c-top">
+									<div class="circle c-top" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Aspiration">
 										<span data-cap-target="aspirationValue">—</span>
 									</div>
 									{# Traits hauts #}
@@ -107,10 +119,10 @@
 									<div class="stem stem-top" aria-hidden="true"></div>
 									{# Losange central #}
 									<div class="kite">
-										<div class="tri tri-up">
+										<div class="tri tri-up" data-bs-toggle="tooltip" data-bs-placement="left" data-bs-title="Axe">
 											<span data-cap-target="axeValue">—</span>
 										</div>
-										<div class="tri tri-down">
+										<div class="tri tri-down" data-bs-toggle="tooltip" data-bs-placement="right" data-bs-title="Clé d'équilibre">
 											<span data-cap-target="vigilanceValue">—</span>
 										</div>
 									</div>
@@ -120,7 +132,7 @@
 									<div class="cap-line cap-line--bottom-left"></div>
 									<div class="cap-line cap-line--bottom-right"></div>
 									{# Cercle bas #}
-									<div class="circle c-bottom">
+									<div class="circle c-bottom" data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-title="Expression">
 										<span data-cap-target="expressionValue">—</span>
 									</div>
 								</div>
