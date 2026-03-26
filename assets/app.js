@@ -19,4 +19,20 @@ document.addEventListener("turbo:load", () => {
     });
 });
 
+const closeAlertMessage = () => {
+    const alert = document.querySelector(".alert");
+    if (alert) {
+        setTimeout(() => {
+            alert.classList.add("fade-out");
+            setTimeout(() => alert.remove(), 1000); 
+        }, 4000);
+    }
+};
+
+const initPage = () => {
+    closeAlertMessage();
+}
+
 console.log("This log comes from assets/app.js - welcome to AssetMapper! 🎉");
+document.addEventListener('load', initPage);
+document.addEventListener('turbo:load', initPage);

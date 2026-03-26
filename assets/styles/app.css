@@ -552,7 +552,8 @@ footer {
     right: 0;
     height: 50%;
     background: var(--greenCircle);
-    clip-path: polygon(50% 0%, 0% 100%, 100% 100%);
+    -webkit-clip-path: polygon(50% 0%, 0% 100%, 100% 100%);
+            clip-path: polygon(50% 0%, 0% 100%, 100% 100%);
 }
 
 .cap-diamond--fluid .tri-down {
@@ -561,11 +562,201 @@ footer {
     right: 0;
     height: 50%;
     background: var(--pink);
-    clip-path: polygon(0% 0%, 100% 0%, 50% 100%);
+    -webkit-clip-path: polygon(0% 0%, 100% 0%, 50% 100%);
+            clip-path: polygon(0% 0%, 100% 0%, 50% 100%);
 }
 
 @media (max-width: 420px) {
     .cap-diamond.cap-diamond--fluid {
         --stroke: 8px;
     }
+}
+
+/*--------------------------------------------------------------
+# Login page
+--------------------------------------------------------------*/
+.card-fill {
+    background-color: #fff !important;
+    background-clip: border-box !important;
+    border: 1px solid #d5d7d9 !important;
+    border-radius: 0.5rem !important;
+    flex: 1 1 auto !important;
+}
+
+.card-fill .card-body {
+    display: flex;
+    align-items: center;
+    padding: 20px !important;
+}
+
+@media (min-width: 576px) {
+    .card-fill .card-body {
+        padding-top: 24px !important;
+        padding-bottom: 24px !important;
+        padding-left: 28px !important;
+        padding-right: 28px !important;
+    }
+}
+
+.my-8 {
+    margin-top: 32px !important;
+    margin-bottom: 32px !important;
+}
+
+.lh-label {
+    line-height: 1.35rem;
+}
+
+.form-control-login {
+    height: calc(1.75em + 0.875rem + 2px) !important;
+    padding: 0.4375rem 1rem !important;
+    line-height: 1.75 !important;
+    color: #0d161b !important;
+    background-color: #fff !important;
+    background-clip: padding-box !important;
+    border: 1px solid #d5d7d9 !important;
+    border-radius: 0.5rem !important;
+}
+
+.form-control-login::-webkit-input-placeholder {
+    color: #9ea2a4 !important;
+}
+
+.form-control-login::-moz-placeholder {
+    color: #9ea2a4 !important;
+}
+
+.form-control-login:-ms-input-placeholder {
+    color: #9ea2a4 !important;
+}
+
+.form-control-login::-ms-input-placeholder {
+    color: #9ea2a4 !important;
+}
+
+.form-control-login::placeholder {
+    color: #9ea2a4 !important;
+}
+
+.form-control-login:focus {
+    color: #0d161b !important;
+    background-color: #fff !important;
+    border-color: #0d161b !important;
+    outline: 0 !important;
+    box-shadow: 0 0 0 0.1875rem #d5d7d9 !important;
+}
+
+form:invalid button.btn-dark[type=submit],
+.btn-dark:disabled {
+    color: #fff;
+    background-color: #0d161b;
+    border-color: #0d161b;
+    opacity: 0.4;
+}
+
+.text-muted a {
+    color: #53595c !important;
+}
+
+/* =========================
+   Login — Dark mode ready
+   ========================= */
+
+html[data-bs-theme="dark"] .card-fill {
+    background-color: var(--app-surface) !important;
+    border-color: var(--app-border) !important;
+}
+
+html[data-bs-theme="dark"] .card-fill .card-body {
+    color: var(--app-text);
+}
+
+/* Labels (tu as fw-semibold + form-label) */
+html[data-bs-theme="dark"] .card-fill .form-label {
+    color: var(--app-text);
+}
+
+/* Inputs login */
+html[data-bs-theme="dark"] .form-control-login {
+    color: var(--app-text) !important;
+    background-color: var(--app-bg) !important;
+    border-color: var(--app-border) !important;
+}
+
+/* Placeholder */
+html[data-bs-theme="dark"] .form-control-login::-webkit-input-placeholder {
+    color: rgba(255, 255, 255, 0.45) !important;
+}
+
+html[data-bs-theme="dark"] .form-control-login::-moz-placeholder {
+    color: rgba(255, 255, 255, 0.45) !important;
+}
+
+html[data-bs-theme="dark"] .form-control-login:-ms-input-placeholder {
+    color: rgba(255, 255, 255, 0.45) !important;
+}
+
+html[data-bs-theme="dark"] .form-control-login::-ms-input-placeholder {
+    color: rgba(255, 255, 255, 0.45) !important;
+}
+
+html[data-bs-theme="dark"] .form-control-login::placeholder {
+    color: rgba(255, 255, 255, 0.45) !important;
+}
+
+/* Focus (on garde un focus visible, mais pas "halo gris clair") */
+html[data-bs-theme="dark"] .form-control-login:focus {
+    color: var(--app-text) !important;
+    background-color: var(--app-bg) !important;
+    border-color: rgba(255, 255, 255, 0.35) !important;
+    box-shadow: 0 0 0 0.1875rem rgba(255, 255, 255, 0.12) !important;
+}
+
+/* Liens éventuels dans la zone login (tu as .text-muted a en dur) */
+html[data-bs-theme="dark"] .text-muted,
+html[data-bs-theme="dark"] .text-muted a {
+    color: var(--app-muted) !important;
+}
+
+/* Si tu réactives plus tard le "toggle password" : bouton lisible en dark */
+html[data-bs-theme="dark"] .toggle-password-button {
+    color: var(--app-muted) !important;
+}
+
+html[data-bs-theme="dark"] .avatar .card {
+    background-color: var(--app-surface);
+}
+
+html[data-bs-theme="dark"] .hfos1d,
+html[data-bs-theme="dark"] .eblipi,
+html[data-bs-theme="dark"] .qzvfbm {
+    color: #5BAEBE !important;
+}
+
+/*--------------------------------------------------------------
+# Entropy indicator colors
+--------------------------------------------------------------*/
+.text-very-weak {
+    color: #842029;
+    font-weight: 600;
+}
+
+.text-weak {
+    color: #dc3545;
+    font-weight: 600;
+}
+
+.text-medium {
+    color: #fd7e14;
+    font-weight: 600;
+}
+
+.text-strong {
+    color: #20c997;
+    font-weight: 600;
+}
+
+.text-very-strong {
+    color: #198754;
+    font-weight: 600;
 }
