@@ -63,7 +63,7 @@ class SecurityController extends AbstractController
         ]);
     }
 
-        #[Route('/forgot-password/{token}', name: 'app_reset_pw')]
+    #[Route('/forgot-password/{token}', name: 'app_reset_pw')]
     public function resetPw(string $token, Request $request, UserRepository $userRepository, UserPasswordHasherInterface $hasher, PasswordResetService $passwordResetService): Response
     {
         $user = $passwordResetService->getUserByResetToken($token, $userRepository);

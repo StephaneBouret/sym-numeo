@@ -1,0 +1,92 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}
+	Abonnement praticien
+{% endblock %}
+
+{% block body %}
+	<section class="py-5">
+		<div class="container">
+			<div class="row align-items-center g-5">
+				<div class="col-lg-6">
+					<span class="badge text-bg-light mb-3">Abonnement annuel</span>
+
+					<h1 class="display-5 fw-bold mb-3">
+						Accédez à l'espace praticien
+					</h1>
+
+					<p class="lead text-muted mb-4">
+						Débloquez les fonctionnalités avancées de l'application, accédez aux calculs complémentaires
+												et générez vos rapports en toute simplicité.
+					</p>
+
+					<ul class="list-unstyled mb-4">
+						<li class="mb-2">✓ Accès à l'espace praticien pendant 1 an</li>
+						<li class="mb-2">✓ Calculs complémentaires</li>
+						<li class="mb-2">✓ Génération de rapports</li>
+						<li class="mb-2">✓ Expérience centralisée dans votre compte</li>
+					</ul>
+
+					<div class="d-flex flex-wrap gap-3">
+						<a href="{{ app.user ? checkoutPath : loginPath }}" class="btn btn-primary btn-lg">
+							Souscrire maintenant
+						</a>
+
+						<a href="{{ path('app_terms') }}" class="btn btn-outline-secondary btn-lg">
+							Voir les CGV
+						</a>
+					</div>
+
+					<div class="mt-4 small text-muted">
+						{% if app.user %}
+							Vous êtes connecté : vous serez redirigé directement vers la page de confirmation de souscription.
+						{% else %}
+							Si vous n'êtes pas connecté, vous serez invité à vous identifier avant d'accéder au checkout.
+						{% endif %}
+					</div>
+				</div>
+
+				<div class="col-lg-6">
+					<div class="card border-0 shadow-sm rounded-4 overflow-hidden">
+						<img src="{{ asset('img/subscription/subscription.webp') }}" class="img-fluid" alt="Illustration de l'abonnement praticien">
+					</div>
+				</div>
+			</div>
+
+			<div class="row mt-5 g-4">
+				<div class="col-md-4">
+					<div class="card h-100 border-0 shadow-sm rounded-4">
+						<div class="card-body p-4">
+							<h2 class="h5 mb-3">Un accès centralisé</h2>
+							<p class="text-muted mb-0">
+								Retrouvez vos outils et fonctionnalités avancées depuis un espace unique, pensé pour un usage fluide.
+							</p>
+						</div>
+					</div>
+				</div>
+
+				<div class="col-md-4">
+					<div class="card h-100 border-0 shadow-sm rounded-4">
+						<div class="card-body p-4">
+							<h2 class="h5 mb-3">Des outils avancés</h2>
+							<p class="text-muted mb-0">
+								Profitez de calculs supplémentaires et de la génération de rapports pour enrichir votre pratique.
+							</p>
+						</div>
+					</div>
+				</div>
+
+				<div class="col-md-4">
+					<div class="card h-100 border-0 shadow-sm rounded-4">
+						<div class="card-body p-4">
+							<h2 class="h5 mb-3">Activation rapide</h2>
+							<p class="text-muted mb-0">
+								Une fois votre souscription validée, votre accès est activé immédiatement selon les conditions prévues.
+							</p>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</section>
+{% endblock %}
