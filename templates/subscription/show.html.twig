@@ -17,7 +17,7 @@
 
 					<p class="lead text-muted mb-4">
 						Débloquez les fonctionnalités avancées de l'application, accédez aux calculs complémentaires
-												et générez vos rapports en toute simplicité.
+																		et générez vos rapports en toute simplicité.
 					</p>
 
 					<ul class="list-unstyled mb-4">
@@ -29,7 +29,11 @@
 
 					<div class="d-flex flex-wrap gap-3">
 						<a href="{{ app.user ? checkoutPath : loginPath }}" class="btn btn-primary btn-lg">
-							Souscrire maintenant
+							{% if app.user and currentSubscription and currentSubscription.isActive and not currentSubscription.isLifetime %}
+								Renouveler
+							{% else %}
+								Souscrire maintenant
+							{% endif %}
 						</a>
 
 						<a href="{{ path('app_terms') }}" class="btn btn-outline-secondary btn-lg">

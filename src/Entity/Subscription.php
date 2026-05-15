@@ -69,6 +69,12 @@ class Subscription
     #[ORM\JoinColumn(nullable: true, onDelete: 'SET NULL')]
     private ?User $user = null;
 
+    #[ORM\Column(nullable: true)]
+    private ?\DateTimeImmutable $reminder30SentAt = null;
+
+    #[ORM\Column(nullable: true)]
+    private ?\DateTimeImmutable $reminder15SentAt = null;
+
     #[ORM\PrePersist]
     public function onPrePersist(): void
     {
@@ -290,6 +296,44 @@ class Subscription
         return $this;
     }
 
+    public function getReminder30SentAt(): ?\DateTimeImmutable
+    {
+        return $this->reminder30SentAt;
+    }
+
+    public function setReminder30SentAt(?\DateTimeImmutable $reminder30SentAt): static
+    {
+        $this->reminder30SentAt = $reminder30SentAt;
+
+        return $this;
+    }
+
+    public function getReminder15SentAt(): ?\DateTimeImmutable
+    {
+        return $this->reminder15SentAt;
+    }
+
+    public function setReminder15SentAt(?\DateTimeImmutable $reminder15SentAt): static
+    {
+        $this->reminder15SentAt = $reminder15SentAt;
+
+        return $this;
+    }
+
+    public function markReminder30Sent(): static
+    {
+        $this->reminder30SentAt = new \DateTimeImmutable();
+
+        return $this;
+    }
+
+    public function markReminder15Sent(): static
+    {
+        $this->reminder15SentAt = new \DateTimeImmutable();
+
+        return $this;
+    }
+
     public function isPending(): bool
     {
         return $this->status === SubscriptionStatus::PENDING;
@@ -385,6 +429,12 @@ class Subscription
     {
         $this->status = SubscriptionStatus::SUSPENDED;
 
+        return $this;
+    }
+
+    public function reactivate(): static
+    {
+        $this->status = SubscriptionStatus::ACTIVE;
         return $this;
     }
 

@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="fr">
+	<head>
+		<meta charset="UTF-8">
+		<title>Votre abonnement arrive à échéance</title>
+	</head>
+	<body style="font-family: Arial, sans-serif; color: #333; background: #f6f7fb; padding: 30px;">
+		<div style="max-width: 620px; margin: 0 auto; background: #fff; padding: 30px; border-radius: 12px;">
+			<h1 style="margin-top: 0;">Votre abonnement arrive à échéance</h1>
+
+			<p>
+				Bonjour,
+			</p>
+
+			<p>
+				Votre abonnement
+				<strong>{{ subscription.title }}</strong>
+				arrive à expiration dans
+				<strong>{{ daysBeforeExpiration }}
+					jours</strong>.
+			</p>
+
+			{% if subscription.endsAt %}
+				<p>
+					Date de fin prévue :
+					<strong>{{ subscription.endsAt|date('d/m/Y') }}</strong>
+				</p>
+			{% endif %}
+
+			<p>
+				Pour continuer à bénéficier de l'espace praticien, vous pouvez renouveler votre abonnement.
+			</p>
+
+			<p style="margin: 30px 0;">
+				<a href="{{ renewUrl }}" style="display: inline-block; background: #111; color: #fff; padding: 12px 20px; border-radius: 6px; text-decoration: none;">
+					Renouveler mon abonnement
+				</a>
+			</p>
+
+			<p style="font-size: 13px; color: #777;">
+				Si vous avez déjà renouvelé votre abonnement, vous pouvez ignorer cet email.
+			</p>
+		</div>
+	</body>
+</html>
