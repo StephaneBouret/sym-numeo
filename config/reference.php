@@ -1345,6 +1345,28 @@ namespace Symfony\Component\DependencyInjection\Loader\Configurator;
  *             always_remember_me?: bool, // Default: false
  *             remember_me_parameter?: scalar|null, // Default: "_remember_me"
  *         },
+ *         two_factor?: array{
+ *             check_path?: scalar|null, // Default: "/2fa_check"
+ *             post_only?: bool, // Default: true
+ *             auth_form_path?: scalar|null, // Default: "/2fa"
+ *             always_use_default_target_path?: bool, // Default: false
+ *             default_target_path?: scalar|null, // Default: "/"
+ *             success_handler?: scalar|null, // Default: null
+ *             failure_handler?: scalar|null, // Default: null
+ *             authentication_required_handler?: scalar|null, // Default: null
+ *             auth_code_parameter_name?: scalar|null, // Default: "_auth_code"
+ *             trusted_parameter_name?: scalar|null, // Default: "_trusted"
+ *             remember_me_sets_trusted?: scalar|null, // Default: false
+ *             multi_factor?: bool, // Default: false
+ *             prepare_on_login?: bool, // Default: false
+ *             prepare_on_access_denied?: bool, // Default: false
+ *             enable_csrf?: scalar|null, // Default: false
+ *             csrf_parameter?: scalar|null, // Default: "_csrf_token"
+ *             csrf_token_id?: scalar|null, // Default: "two_factor"
+ *             csrf_header?: scalar|null, // Default: null
+ *             csrf_token_manager?: scalar|null, // Default: "scheb_two_factor.csrf_token_manager"
+ *             provider?: scalar|null, // Default: null
+ *         },
  *     }>,
  *     access_control?: list<array{ // Default: []
  *         request_matcher?: scalar|null, // Default: null
@@ -1541,6 +1563,41 @@ namespace Symfony\Component\DependencyInjection\Loader\Configurator;
  *     },
  *     controllers_json?: scalar|null, // Deprecated: The "twig_component.controllers_json" config option is deprecated, and will be removed in 3.0. // Default: null
  * }
+ * @psalm-type SchebTwoFactorConfig = array{
+ *     persister?: scalar|null, // Default: "scheb_two_factor.persister.doctrine"
+ *     model_manager_name?: scalar|null, // Default: null
+ *     security_tokens?: list<scalar|null>,
+ *     ip_whitelist?: list<scalar|null>,
+ *     ip_whitelist_provider?: scalar|null, // Default: "scheb_two_factor.default_ip_whitelist_provider"
+ *     two_factor_token_factory?: scalar|null, // Default: "scheb_two_factor.default_token_factory"
+ *     two_factor_provider_decider?: scalar|null, // Default: "scheb_two_factor.default_provider_decider"
+ *     two_factor_condition?: scalar|null, // Default: null
+ *     code_reuse_cache?: scalar|null, // Default: null
+ *     code_reuse_cache_duration?: int, // Default: 60
+ *     code_reuse_default_handler?: scalar|null, // Default: null
+ *     trusted_device?: bool|array{
+ *         enabled?: scalar|null, // Default: false
+ *         manager?: scalar|null, // Default: "scheb_two_factor.default_trusted_device_manager"
+ *         lifetime?: int, // Default: 5184000
+ *         extend_lifetime?: bool, // Default: false
+ *         key?: scalar|null, // Default: null
+ *         cookie_name?: scalar|null, // Default: "trusted_device"
+ *         cookie_secure?: true|false|"auto", // Default: "auto"
+ *         cookie_domain?: scalar|null, // Default: null
+ *         cookie_path?: scalar|null, // Default: "/"
+ *         cookie_same_site?: scalar|null, // Default: "lax"
+ *     },
+ *     email?: bool|array{
+ *         enabled?: scalar|null, // Default: false
+ *         mailer?: scalar|null, // Default: null
+ *         code_generator?: scalar|null, // Default: "scheb_two_factor.security.email.default_code_generator"
+ *         form_renderer?: scalar|null, // Default: null
+ *         sender_email?: scalar|null, // Default: null
+ *         sender_name?: scalar|null, // Default: null
+ *         template?: scalar|null, // Default: "@SchebTwoFactor/Authentication/form.html.twig"
+ *         digits?: int, // Default: 4
+ *     },
+ * }
  * @psalm-type ConfigType = array{
  *     imports?: ImportsConfig,
  *     parameters?: ParametersConfig,
@@ -1556,6 +1613,7 @@ namespace Symfony\Component\DependencyInjection\Loader\Configurator;
  *     monolog?: MonologConfig,
  *     misd_phone_number?: MisdPhoneNumberConfig,
  *     twig_component?: TwigComponentConfig,
+ *     scheb_two_factor?: SchebTwoFactorConfig,
  *     "when@dev"?: array{
  *         imports?: ImportsConfig,
  *         parameters?: ParametersConfig,
@@ -1574,6 +1632,7 @@ namespace Symfony\Component\DependencyInjection\Loader\Configurator;
  *         maker?: MakerConfig,
  *         misd_phone_number?: MisdPhoneNumberConfig,
  *         twig_component?: TwigComponentConfig,
+ *         scheb_two_factor?: SchebTwoFactorConfig,
  *     },
  *     "when@prod"?: array{
  *         imports?: ImportsConfig,
@@ -1590,6 +1649,7 @@ namespace Symfony\Component\DependencyInjection\Loader\Configurator;
  *         monolog?: MonologConfig,
  *         misd_phone_number?: MisdPhoneNumberConfig,
  *         twig_component?: TwigComponentConfig,
+ *         scheb_two_factor?: SchebTwoFactorConfig,
  *     },
  *     "when@test"?: array{
  *         imports?: ImportsConfig,
@@ -1607,6 +1667,7 @@ namespace Symfony\Component\DependencyInjection\Loader\Configurator;
  *         monolog?: MonologConfig,
  *         misd_phone_number?: MisdPhoneNumberConfig,
  *         twig_component?: TwigComponentConfig,
+ *         scheb_two_factor?: SchebTwoFactorConfig,
  *     },
  *     ...<string, ExtensionType|array{ // extra keys must follow the when@%env% pattern or match an extension alias
  *         imports?: ImportsConfig,

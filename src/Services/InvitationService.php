@@ -75,7 +75,6 @@ class InvitationService
         $invitationUrl = $this->getInvitationUrl($invitation);
 
         $this->sendMailService->sendMail(
-            null,
             sprintf('Invitation - %s', $invitation->getType()->label()),
             $invitation->getEmail(),
             'Invitation à rejoindre l\'application',
@@ -83,7 +82,8 @@ class InvitationService
             [
                 'invitation' => $invitation,
                 'invitationUrl' => $invitationUrl,
-            ]
+            ],
+            null
         );
 
         $invitation->markSent();

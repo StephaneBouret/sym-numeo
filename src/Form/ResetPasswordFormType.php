@@ -46,6 +46,9 @@ class ResetPasswordFormType extends AbstractType
                     ]
                 ],
                 'second_options' => [
+                    'toggle' => true,
+                    'hidden_label' => 'Masquer',
+                    'visible_label' => 'Afficher',
                     'label' => 'Confirmez votre mot de passe :',
                     'label_attr' => [
                         'class' => 'lh-label fw-bold form-label'

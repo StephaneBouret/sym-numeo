@@ -86,6 +86,19 @@
             "./bin/phpunit"
         ]
     },
+    "scheb/2fa-bundle": {
+        "version": "8.5",
+        "recipe": {
+            "repo": "github.com/symfony/recipes",
+            "branch": "main",
+            "version": "6.0",
+            "ref": "1e6f68089146853a790b5da9946fc5974f6fcd49"
+        },
+        "files": [
+            "./config/packages/scheb_2fa.yaml",
+            "./config/routes/scheb_2fa.yaml"
+        ]
+    },
     "stripe/stripe-php": {
         "version": "20.0",
         "recipe": {
@@ -326,9 +339,6 @@
             "version": "7.0",
             "ref": "0df5844274d871b37fc3816c57a768ffc60a43a5"
         }
-    },
-    "symfony/ux-toggle-password": {
-        "version": "v2.34.0"
     },
     "symfony/ux-turbo": {
         "version": "2.31",

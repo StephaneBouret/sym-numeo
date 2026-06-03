@@ -37,8 +37,13 @@ class DashboardController extends AbstractDashboardController
 
             MenuItem::section('Entreprise'),
             MenuItem::linkTo(CompanyCrudController::class, 'Entreprise', 'fa-solid fa-building'),
+
+            MenuItem::section('Abonnements'),
             MenuItem::linkTo(InvitationCrudController::class, 'Invitation', 'fa-solid fa-hand-dots'),
             MenuItem::linkTo(SubscriptionCrudController::class, 'Abonnements', 'fa fa-gem'),
+
+            MenuItem::section('Gestion des appareils'),
+            MenuItem::linkTo(UserDeviceCrudController::class, 'Appareils', 'fa fa-desktop'),
 
             MenuItem::section('Site'),
             MenuItem::linkToUrl('Retour au site', 'fas fa-home', $this->generateUrl('app_home')),

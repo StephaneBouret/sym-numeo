@@ -35,12 +35,12 @@ class PasswordResetService
         ];
 
         $this->email->sendMail(
-            null,
             'Infos de l\'application Sym Numeo',
             $user->getEmail(),
             'Réinitialisation de mot de passe',
             'password_reset',
-            $context
+            $context,
+            null
         );
     }
 
@@ -51,7 +51,7 @@ class PasswordResetService
         if ('' === $token) {
             return null;
         }
-        
+
         return $userRepository->findOneBy(['resetToken' => $token]);
     }
 
@@ -70,6 +70,7 @@ class PasswordResetService
     {
         $hashedPassword = $hasher->hashPassword($user, $plainPassword);
         $user->setPassword($hashedPassword);
+        $user->invalidateTrustedDevices();
 
         $user->setResetToken(null)
             ->setResetTokenCreatedAt(null);

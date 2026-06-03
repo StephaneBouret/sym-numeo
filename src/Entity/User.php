@@ -5,20 +5,22 @@ namespace App\Entity;
 use App\Repository\UserRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
-use Symfony\Component\Validator\Constraints as Assert;
 use Doctrine\ORM\Mapping as ORM;
 use libphonenumber\PhoneNumber;
+use Misd\PhoneNumberBundle\Validator\Constraints\PhoneNumber as AssertPhoneNumber;
+use Scheb\TwoFactorBundle\Model\Email\TwoFactorInterface;
+use Scheb\TwoFactorBundle\Model\TrustedDeviceInterface;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
+use Symfony\Component\Validator\Constraints as Assert;
 use ZipCodeValidator\Constraints\ZipCode;
-use Misd\PhoneNumberBundle\Validator\Constraints\PhoneNumber as AssertPhoneNumber;
 
 #[ORM\Entity(repositoryClass: UserRepository::class)]
 #[ORM\Table(name: '`user`')]
 #[ORM\UniqueConstraint(name: 'UNIQ_IDENTIFIER_EMAIL', fields: ['email'])]
 #[UniqueEntity(fields: ['email'], message: 'Il existe un compte avec cet email')]
-class User implements UserInterface, PasswordAuthenticatedUserInterface
+class User implements UserInterface, PasswordAuthenticatedUserInterface, TwoFactorInterface, TrustedDeviceInterface
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
@@ -30,6 +32,12 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         message: 'L\'adresse email {{ value }} est incorrecte.',
     )]
     private ?string $email = null;
+
+    #[ORM\Column(type: 'string', nullable: true)]
+    private ?string $authCode = null;
+
+    #[ORM\Column(type: 'integer')]
+    private int $trustedVersion = 0;
 
     /**
      * @var list<string> The user roles
@@ -97,9 +105,16 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\OneToOne(mappedBy: 'user', cascade: ['persist', 'remove'])]
     private ?Invitation $invitation = null;
 
+    /**
+     * @var Collection<int, UserDevice>
+     */
+    #[ORM\OneToMany(targetEntity: UserDevice::class, mappedBy: 'user')]
+    private Collection $devices;
+
     public function __construct()
     {
         $this->subscriptions = new ArrayCollection();
+        $this->devices = new ArrayCollection();
     }
 
     public function __toString()
@@ -339,5 +354,57 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
 
         return $this;
+    }
+
+    /**
+     * @return Collection<int, UserDevice>
+     */
+    public function getDevices(): Collection
+    {
+        return $this->devices;
+    }
+
+    public function addDevice(UserDevice $device): static
+    {
+        if (!$this->devices->contains($device)) {
+            $this->devices->add($device);
+            $device->setUser($this);
+        }
+
+        return $this;
+    }
+
+    public function isEmailAuthEnabled(): bool
+    {
+        return true; // This can be a persisted field to switch email code authentication on/off
+    }
+
+    public function getEmailAuthRecipient(): string
+    {
+        return $this->email;
+    }
+
+    public function getEmailAuthCode(): ?string
+    {
+        // if (null === $this->authCode) {
+        //     throw new \LogicException('The email authentication code was not set');
+        // }
+
+        return $this->authCode;
+    }
+
+    public function setEmailAuthCode(string $authCode): void
+    {
+        $this->authCode = $authCode;
+    }
+
+    public function getTrustedTokenVersion(): int
+    {
+        return $this->trustedVersion;
+    }
+
+    public function invalidateTrustedDevices(): void
+    {
+        $this->trustedVersion++;
     }
 }

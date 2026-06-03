@@ -24,7 +24,6 @@ final class SubscriptionReminderService
         );
 
         $this->sendMailService->sendMail(
-            null,
             sprintf('Votre abonnement expire dans %d jours', $daysBeforeExpiration),
             (string) $subscription->getEmail(),
             sprintf('Votre abonnement praticien expire dans %d jours', $daysBeforeExpiration),
@@ -33,7 +32,8 @@ final class SubscriptionReminderService
                 'subscription' => $subscription,
                 'daysBeforeExpiration' => $daysBeforeExpiration,
                 'renewUrl' => $renewUrl,
-            ]
+            ],
+            null
         );
 
         if ($daysBeforeExpiration === 30) {

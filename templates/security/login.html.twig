@@ -17,6 +17,18 @@
 							<div class="alert alert-danger">{{ error.messageKey|trans(error.messageData, 'security') }}</div>
 						{% endif %}
 
+						{% if device_limit_error %}
+							<div class="alert alert-danger">
+								Vous avez déjà 2 appareils actifs. Déconnectez un ancien appareil avant d'en ajouter un nouveau.
+							</div>
+						{% endif %}
+
+						{% if device_revoked %}
+							<div class="alert alert-success">
+								Cet appareil a été révoqué. Vous avez été déconnecté.
+							</div>
+						{% endif %}
+
 						{% if app.user %}
 							<div class="mb-3">
 								You are logged in as
@@ -31,8 +43,8 @@
 						</div>
 						<div class="form-group mb-3">
 							<label for="password" class="form-label lh-label fw-semibold">Votre mot de passe :</label>
-							<div class="position-relative">
-								<input type="password" name="_password" id="password" class="form-control form-control-login" autocomplete="current-password" required placeholder="••••••••" {{ stimulus_controller('symfony/ux-toggle-password/toggle-password', { visibleLabel: 'Afficher', hiddenLabel: 'Masquer', buttonClasses: ['toggle-password-button'], } ) }}>
+							<div class="toggle-password-container">
+								<input type="password" name="_password" id="password" class="form-control form-control-login" autocomplete="current-password" required placeholder="••••••••" data-controller="toggle-password" data-toggle-password-visible-label-value="Afficher" data-toggle-password-hidden-label-value="Masquer" data-toggle-password-button-classes-value='["toggle-password-button"]'>
 							</div>
 						</div>
 
@@ -53,9 +65,7 @@
 					</form>
 					<div class="d-flex flex-column text-center mt-4">
 						<span class="text-muted">Pas encore inscrit(e) ?
-							<a href="{{ path('app_register', {
-                                _target_path: app.request.query.get('_target_path')
-                            }) }}">M'inscrire</a>
+							<a href="{{ path('app_register', { _target_path: app.request.query.get('_target_path') }) }}">M'inscrire</a>
 						</span>
 						<span class="text-muted">
 							Vous avez oublié votre mot de passe&nbsp;?

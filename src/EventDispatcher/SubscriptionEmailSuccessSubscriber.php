@@ -35,7 +35,6 @@ class SubscriptionEmailSuccessSubscriber implements EventSubscriberInterface
 
         if ($user && $user->getEmail()) {
             $this->sendMail->sendMail(
-                null,
                 'Votre abonnement praticien est maintenant actif',
                 $user->getEmail(),
                 'Votre abonnement a bien été activé',
@@ -44,7 +43,8 @@ class SubscriptionEmailSuccessSubscriber implements EventSubscriberInterface
                     'subscription' => $subscription,
                     'user' => $user,
                     'subscriptionUrl' => $subscriptionUrl,
-                ]
+                ],
+                null
             );
         }
 

@@ -11,12 +11,12 @@ class SendMailService
     public function __construct(protected MailerInterface $mailer, protected string $defaultFrom) {}
 
         public function sendMail(
-        ?string $from = null,
         string $name,
         string $to,
         string $subject,
         string $template,
-        array $context
+        array $context,
+        ?string $from = null,
     )
     {
         $email = new TemplatedEmail();
