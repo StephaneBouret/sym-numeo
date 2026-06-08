@@ -1598,6 +1598,145 @@ namespace Symfony\Component\DependencyInjection\Loader\Configurator;
  *         digits?: int, // Default: 4
  *     },
  * }
+ * @psalm-type LiipImagineConfig = array{
+ *     resolvers?: array<string, array{ // Default: []
+ *         web_path?: array{
+ *             web_root?: scalar|null, // Default: "%kernel.project_dir%/public"
+ *             cache_prefix?: scalar|null, // Default: "media/cache"
+ *         },
+ *         aws_s3?: array{
+ *             bucket: scalar|null,
+ *             cache?: scalar|null, // Default: false
+ *             use_psr_cache?: bool, // Default: false
+ *             acl?: scalar|null, // Default: "public-read"
+ *             cache_prefix?: scalar|null, // Default: ""
+ *             client_id?: scalar|null, // Default: null
+ *             client_config: list<mixed>,
+ *             get_options?: array<string, scalar|null>,
+ *             put_options?: array<string, scalar|null>,
+ *             proxies?: array<string, scalar|null>,
+ *         },
+ *         flysystem?: array{
+ *             filesystem_service: scalar|null,
+ *             cache_prefix?: scalar|null, // Default: ""
+ *             root_url: scalar|null,
+ *             visibility?: "public"|"private"|"noPredefinedVisibility", // Default: "public"
+ *         },
+ *     }>,
+ *     loaders?: array<string, array{ // Default: []
+ *         stream?: array{
+ *             wrapper: scalar|null,
+ *             context?: scalar|null, // Default: null
+ *         },
+ *         filesystem?: array{
+ *             locator?: "filesystem"|"filesystem_insecure", // Using the "filesystem_insecure" locator is not recommended due to a less secure resolver mechanism, but is provided for those using heavily symlinked projects. // Default: "filesystem"
+ *             data_root?: list<scalar|null>,
+ *             allow_unresolvable_data_roots?: bool, // Default: false
+ *             bundle_resources?: array{
+ *                 enabled?: bool, // Default: false
+ *                 access_control_type?: "blacklist"|"whitelist", // Sets the access control method applied to bundle names in "access_control_list" into a blacklist or whitelist. // Default: "blacklist"
+ *                 access_control_list?: list<scalar|null>,
+ *             },
+ *         },
+ *         flysystem?: array{
+ *             filesystem_service: scalar|null,
+ *         },
+ *         asset_mapper?: array<mixed>,
+ *         chain?: array{
+ *             loaders: list<scalar|null>,
+ *         },
+ *     }>,
+ *     driver?: scalar|null, // Default: "gd"
+ *     cache?: scalar|null, // Default: "default"
+ *     cache_base_path?: scalar|null, // Default: ""
+ *     data_loader?: scalar|null, // Default: "default"
+ *     default_image?: scalar|null, // Default: null
+ *     default_filter_set_settings?: array{
+ *         quality?: scalar|null, // Default: 100
+ *         jpeg_quality?: scalar|null, // Default: null
+ *         png_compression_level?: scalar|null, // Default: null
+ *         png_compression_filter?: scalar|null, // Default: null
+ *         format?: scalar|null, // Default: null
+ *         animated?: bool, // Default: false
+ *         cache?: scalar|null, // Default: null
+ *         data_loader?: scalar|null, // Default: null
+ *         default_image?: scalar|null, // Default: null
+ *         filters?: array<string, array<string, mixed>>,
+ *         post_processors?: array<string, array<string, mixed>>,
+ *     },
+ *     controller?: array{
+ *         filter_action?: scalar|null, // Default: "Liip\\ImagineBundle\\Controller\\ImagineController::filterAction"
+ *         filter_runtime_action?: scalar|null, // Default: "Liip\\ImagineBundle\\Controller\\ImagineController::filterRuntimeAction"
+ *         redirect_response_code?: int, // Default: 302
+ *     },
+ *     filter_sets?: array<string, array{ // Default: []
+ *         quality?: scalar|null,
+ *         jpeg_quality?: scalar|null,
+ *         png_compression_level?: scalar|null,
+ *         png_compression_filter?: scalar|null,
+ *         format?: scalar|null,
+ *         animated?: bool,
+ *         cache?: scalar|null,
+ *         data_loader?: scalar|null,
+ *         default_image?: scalar|null,
+ *         filters?: array<string, array<string, mixed>>,
+ *         post_processors?: array<string, array<string, mixed>>,
+ *     }>,
+ *     twig?: array{
+ *         mode?: "none"|"lazy"|"legacy", // Twig mode: none/lazy/legacy (default) // Default: "legacy"
+ *         assets_version?: scalar|null, // Default: null
+ *     },
+ *     enqueue?: bool, // Enables integration with enqueue if set true. Allows resolve image caches in background by sending messages to MQ. // Default: false
+ *     messenger?: bool|array{ // Enables integration with symfony/messenger if set true. Warmup image caches in background by sending messages to MQ.
+ *         enabled?: bool, // Default: false
+ *     },
+ *     templating?: bool, // Enables integration with symfony/templating component // Default: true
+ *     webp?: array{
+ *         generate?: bool, // Default: false
+ *         quality?: int, // Default: 100
+ *         cache?: scalar|null, // Default: null
+ *         data_loader?: scalar|null, // Default: null
+ *         post_processors?: array<string, array<string, mixed>>,
+ *     },
+ * }
+ * @psalm-type VichUploaderConfig = array{
+ *     default_filename_attribute_suffix?: scalar|null, // Default: "_name"
+ *     db_driver: scalar|null,
+ *     storage?: scalar|null, // Default: "file_system"
+ *     use_flysystem_to_resolve_uri?: bool, // Default: false
+ *     twig?: scalar|null, // twig requires templating // Default: true
+ *     form?: scalar|null, // Default: true
+ *     metadata?: array{
+ *         cache?: scalar|null, // Default: "file"
+ *         type?: scalar|null, // Default: "attribute"
+ *         file_cache?: array{
+ *             dir?: scalar|null, // Default: "%kernel.cache_dir%/vich_uploader"
+ *         },
+ *         auto_detection?: bool, // Default: true
+ *         directories?: list<array{ // Default: []
+ *             path: scalar|null,
+ *             namespace_prefix?: scalar|null, // Default: ""
+ *         }>,
+ *     },
+ *     mappings?: array<string, array{ // Default: []
+ *         uri_prefix?: scalar|null, // Default: "/uploads"
+ *         upload_destination?: scalar|null, // Default: null
+ *         namer?: string|array{
+ *             service?: scalar|null, // Default: null
+ *             options?: mixed, // Default: null
+ *         },
+ *         directory_namer?: string|array{
+ *             service?: scalar|null, // Default: null
+ *             options?: mixed, // Default: null
+ *         },
+ *         delete_on_remove?: scalar|null, // Default: true
+ *         erase_fields?: scalar|null, // Default: true
+ *         delete_on_update?: scalar|null, // Default: true
+ *         inject_on_load?: scalar|null, // Default: false
+ *         namer_keep_extension?: scalar|null, // Default: false
+ *         db_driver?: scalar|null, // Default: null
+ *     }>,
+ * }
  * @psalm-type ConfigType = array{
  *     imports?: ImportsConfig,
  *     parameters?: ParametersConfig,
@@ -1614,6 +1753,8 @@ namespace Symfony\Component\DependencyInjection\Loader\Configurator;
  *     misd_phone_number?: MisdPhoneNumberConfig,
  *     twig_component?: TwigComponentConfig,
  *     scheb_two_factor?: SchebTwoFactorConfig,
+ *     liip_imagine?: LiipImagineConfig,
+ *     vich_uploader?: VichUploaderConfig,
  *     "when@dev"?: array{
  *         imports?: ImportsConfig,
  *         parameters?: ParametersConfig,
@@ -1633,6 +1774,8 @@ namespace Symfony\Component\DependencyInjection\Loader\Configurator;
  *         misd_phone_number?: MisdPhoneNumberConfig,
  *         twig_component?: TwigComponentConfig,
  *         scheb_two_factor?: SchebTwoFactorConfig,
+ *         liip_imagine?: LiipImagineConfig,
+ *         vich_uploader?: VichUploaderConfig,
  *     },
  *     "when@prod"?: array{
  *         imports?: ImportsConfig,
@@ -1650,6 +1793,8 @@ namespace Symfony\Component\DependencyInjection\Loader\Configurator;
  *         misd_phone_number?: MisdPhoneNumberConfig,
  *         twig_component?: TwigComponentConfig,
  *         scheb_two_factor?: SchebTwoFactorConfig,
+ *         liip_imagine?: LiipImagineConfig,
+ *         vich_uploader?: VichUploaderConfig,
  *     },
  *     "when@test"?: array{
  *         imports?: ImportsConfig,
@@ -1668,6 +1813,8 @@ namespace Symfony\Component\DependencyInjection\Loader\Configurator;
  *         misd_phone_number?: MisdPhoneNumberConfig,
  *         twig_component?: TwigComponentConfig,
  *         scheb_two_factor?: SchebTwoFactorConfig,
+ *         liip_imagine?: LiipImagineConfig,
+ *         vich_uploader?: VichUploaderConfig,
  *     },
  *     ...<string, ExtensionType|array{ // extra keys must follow the when@%env% pattern or match an extension alias
  *         imports?: ImportsConfig,

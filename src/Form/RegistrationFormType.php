@@ -119,6 +119,7 @@ class RegistrationFormType extends AbstractType
             ->add('phone', PhoneNumberType::class, [
                 'default_region' => 'FR',
                 'format' => PhoneNumberFormat::NATIONAL,
+                'number_type' => PhoneNumberType::NUMBER_TYPE_TEL,
                 'label' => 'Votre téléphone :',
                 'label_attr' => [
                     'class' => 'lh-label fw-medium'

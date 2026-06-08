@@ -45,6 +45,9 @@ class DashboardController extends AbstractDashboardController
             MenuItem::section('Gestion des appareils'),
             MenuItem::linkTo(UserDeviceCrudController::class, 'Appareils', 'fa fa-desktop'),
 
+            MenuItem::section('Utilisateurs'),
+            MenuItem::linkTo(UserCrudController::class, 'Utilisateurs', 'fas fa-user'),
+
             MenuItem::section('Site'),
             MenuItem::linkToUrl('Retour au site', 'fas fa-home', $this->generateUrl('app_home')),
         ];
