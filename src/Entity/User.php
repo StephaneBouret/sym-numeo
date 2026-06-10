@@ -2,6 +2,7 @@
 
 namespace App\Entity;
 
+use App\Enum\UserAccountStatus;
 use App\Repository\UserRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
@@ -19,6 +20,7 @@ use ZipCodeValidator\Constraints\ZipCode;
 #[ORM\Entity(repositoryClass: UserRepository::class)]
 #[ORM\Table(name: '`user`')]
 #[ORM\UniqueConstraint(name: 'UNIQ_IDENTIFIER_EMAIL', fields: ['email'])]
+#[ORM\UniqueConstraint(name: 'UNIQ_RESET_TOKEN', fields: ['resetToken'])]
 #[UniqueEntity(fields: ['email'], message: 'Il existe un compte avec cet email')]
 class User implements UserInterface, PasswordAuthenticatedUserInterface, TwoFactorInterface, TrustedDeviceInterface
 {
@@ -90,11 +92,14 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface, TwoFact
     #[AssertPhoneNumber(defaultRegion: 'FR')]
     private ?PhoneNumber $phone = null;
 
-    #[ORM\Column(nullable: true)]
+    #[ORM\Column(length: 64, nullable: true)]
     private ?string $resetToken = null;
 
     #[ORM\Column(nullable: true)]
     private ?\DateTimeImmutable $resetTokenCreatedAt = null;
+
+    #[ORM\Column(length: 32, enumType: UserAccountStatus::class)]
+    private UserAccountStatus $accountStatus = UserAccountStatus::ACTIVE;
 
     /**
      * @var Collection<int, Subscription>
@@ -431,5 +436,32 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface, TwoFact
         $this->avatar = $avatar;
 
         return $this;
+    }
+
+    public function getAccountStatus(): UserAccountStatus
+    {
+        return $this->accountStatus;
+    }
+
+    public function setAccountStatus(UserAccountStatus $accountStatus): static
+    {
+        $this->accountStatus = $accountStatus;
+
+        return $this;
+    }
+
+    public function getAccountStatusLabel(): string
+    {
+        return $this->accountStatus->label();
+    }
+
+    public function getAccountStatusBadgeClass(): string
+    {
+        return $this->accountStatus->badgeClass();
+    }
+
+    public function isAccountActive(): bool
+    {
+        return $this->accountStatus->isActive();
     }
 }

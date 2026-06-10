@@ -1,0 +1,34 @@
+<?php
+
+declare(strict_types=1);
+
+namespace DoctrineMigrations;
+
+use Doctrine\DBAL\Schema\Schema;
+use Doctrine\Migrations\AbstractMigration;
+
+/**
+ * Auto-generated Migration: Please modify to your needs!
+ */
+final class Version20260609095605 extends AbstractMigration
+{
+    public function getDescription(): string
+    {
+        return '';
+    }
+
+    public function up(Schema $schema): void
+    {
+        // this up() migration is auto-generated, please modify it to your needs
+        $this->addSql('ALTER TABLE `user` ADD account_status VARCHAR(32) DEFAULT \'active\' NOT NULL, CHANGE reset_token reset_token VARCHAR(64) DEFAULT NULL');
+        $this->addSql('ALTER TABLE `user` CHANGE account_status account_status VARCHAR(32) NOT NULL');
+        $this->addSql('CREATE UNIQUE INDEX UNIQ_RESET_TOKEN ON user (reset_token)');
+    }
+
+    public function down(Schema $schema): void
+    {
+        // this down() migration is auto-generated, please modify it to your needs
+        $this->addSql('DROP INDEX UNIQ_RESET_TOKEN ON `user`');
+        $this->addSql('ALTER TABLE `user` DROP account_status, CHANGE reset_token reset_token VARCHAR(255) DEFAULT NULL');
+    }
+}
