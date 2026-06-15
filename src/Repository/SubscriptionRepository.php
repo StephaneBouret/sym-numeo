@@ -116,6 +116,54 @@ class SubscriptionRepository extends ServiceEntityRepository
             ->getResult();
     }
 
+    /**
+     * @return Subscription[]
+     */
+    public function findActiveAnnualSubscriptionsForUserExcept(User $user, Subscription $excludedSubscription): array
+    {
+        $qb = $this->createQueryBuilder('s')
+            ->andWhere('s.user = :user')
+            ->andWhere('s.status = :status')
+            ->andWhere('s.isLifetime = false')
+            ->setParameter('user', $user)
+            ->setParameter('status', SubscriptionStatus::ACTIVE)
+            ->orderBy('s.endsAt', 'DESC');
+
+        if (null !== $excludedSubscription->getId()) {
+            $qb
+                ->andWhere('s.id != :excludedSubscriptionId')
+                ->setParameter('excludedSubscriptionId', $excludedSubscription->getId());
+        }
+
+        return $qb->getQuery()->getResult();
+    }
+
+    /**
+     * @return Subscription[]
+     */
+    public function findSupersededActiveAnnualSubscriptions(): array
+    {
+        return $this->createQueryBuilder('s')
+            ->andWhere('s.status = :status')
+            ->andWhere('s.isLifetime = false')
+            ->andWhere('s.user IS NOT NULL')
+            ->andWhere(
+                'EXISTS (
+                    SELECT newer.id
+                    FROM App\Entity\Subscription newer
+                    WHERE newer.user = s.user
+                    AND newer.status = :status
+                    AND newer.isLifetime = false
+                    AND newer.id != s.id
+                    AND newer.startsAt > s.startsAt
+                )'
+            )
+            ->setParameter('status', SubscriptionStatus::ACTIVE)
+            ->orderBy('s.startsAt', 'ASC')
+            ->getQuery()
+            ->getResult();
+    }
+
     public function findActiveLifetimeOrSuspendedForUser(User $user): ?Subscription
     {
         $subscriptions = $this->createQueryBuilder('s')

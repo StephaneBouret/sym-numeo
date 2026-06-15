@@ -6,6 +6,7 @@ use App\Entity\Subscription;
 use App\Event\SubscriptionSuccessEvent;
 use App\Repository\SubscriptionRepository;
 use Doctrine\ORM\EntityManagerInterface;
+use Psr\Log\LoggerInterface;
 use Stripe\Exception\SignatureVerificationException;
 use Stripe\Webhook;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -16,7 +17,10 @@ use Symfony\Component\Routing\Attribute\Route;
 
 final class StripeWebhookController extends AbstractController
 {
-    public function __construct(private readonly string $stripeWebhookSecret) {}
+    public function __construct(
+        private readonly string $stripeWebhookSecret,
+        private readonly LoggerInterface $logger
+    ) {}
 
     #[Route('/stripe/webhook', name: 'app_stripe_webhook', methods: ['POST'])]
     public function __invoke(
@@ -67,7 +71,13 @@ final class StripeWebhookController extends AbstractController
                 $subscription = $subscriptionRepository->find($subscriptionId);
 
                 if (!$subscription) {
-                    return new Response('Souscription introuvable.', Response::HTTP_NOT_FOUND);
+                    $this->logger->warning('Souscription Stripe introuvable.', [
+                        'subscription_id' => $subscriptionId,
+                        'payment_intent' => $paymentIntent->id,
+                        'event_type' => $event->type,
+                    ]);
+
+                    return new Response('Event traité.', Response::HTTP_OK);
                 }
 
                 // Idempotence : si déjà active, on ne refait rien
@@ -80,14 +90,47 @@ final class StripeWebhookController extends AbstractController
                     return new Response('Souscription non payable dans cet état.', Response::HTTP_OK);
                 }
 
+                if (
+                    (int) $paymentIntent->amount !== $subscription->getPriceCents() ||
+                    strtolower((string) $paymentIntent->currency) !== 'eur'
+                ) {
+                    $this->logger->warning('Stripe PaymentIntent incohérent pour une souscription.', [
+                        'payment_intent' => $paymentIntent->id,
+                        'subscription_id' => $subscription->getId(),
+                        'payment_intent_amount' => $paymentIntent->amount,
+                        'subscription_price_cents' => $subscription->getPriceCents(),
+                        'payment_intent_currency' => $paymentIntent->currency,
+                    ]);
+                }
+
+                $previousActiveAnnualSubscriptions = [];
+                $user = $subscription->getUser();
+
+                if (null !== $user) {
+                    $previousActiveAnnualSubscriptions = $subscriptionRepository
+                        ->findActiveAnnualSubscriptionsForUserExcept($user, $subscription);
+                }
+
                 $subscription->activateForOneYear(
                     new \DateTimeImmutable(),
                     $paymentIntent->id
                 );
 
+                foreach ($previousActiveAnnualSubscriptions as $previousSubscription) {
+                    $previousSubscription->markExpired();
+                }
+
                 $em->flush();
 
-                $dispatcher->dispatch(new SubscriptionSuccessEvent($subscription), SubscriptionSuccessEvent::NAME);
+                try {
+                    $dispatcher->dispatch(new SubscriptionSuccessEvent($subscription), SubscriptionSuccessEvent::NAME);
+                } catch (\Throwable $e) {
+                    $this->logger->error('Erreur lors de l\'envoi de l\'email de confirmation d\'abonnement.', [
+                        'exception' => $e,
+                        'payment_intent' => $paymentIntent->id,
+                        'subscription_id' => $subscription->getId(),
+                    ]);
+                }
 
                 return new Response('Souscription activée.', Response::HTTP_OK);
 
@@ -112,7 +155,13 @@ final class StripeWebhookController extends AbstractController
                 $subscription = $subscriptionRepository->find($subscriptionId);
 
                 if (!$subscription) {
-                    return new Response('Souscription introuvable.', Response::HTTP_NOT_FOUND);
+                    $this->logger->warning('Souscription Stripe introuvable.', [
+                        'subscription_id' => $subscriptionId,
+                        'payment_intent' => $paymentIntent->id,
+                        'event_type' => $event->type,
+                    ]);
+
+                    return new Response('Event traité.', Response::HTTP_OK);
                 }
 
                 // Ici on ne change pas forcément le statut.
