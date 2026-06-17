@@ -8,6 +8,7 @@ use App\Form\AvatarFormType;
 use App\Form\UpdatePasswordUserFormType;
 use App\Form\UpdateUserProfileFormType;
 use App\Services\AvatarService;
+use App\Services\DeviceService;
 use App\Services\UserProfileService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -98,6 +99,10 @@ final class ProfileController extends AbstractController
 
         $this->addFlash('success', 'Votre compte a bien été supprimé.');
 
-        return $this->redirectToRoute('app_home', [], Response::HTTP_SEE_OTHER);
+        $response = $this->redirectToRoute('app_home', [], Response::HTTP_SEE_OTHER);
+        $response->headers->clearCookie(DeviceService::COOKIE_NAME);
+        $response->headers->clearCookie('REMEMBERME');
+
+        return $response;
     }
 }

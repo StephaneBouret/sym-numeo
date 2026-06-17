@@ -159,6 +159,7 @@ class UserCrudController extends AbstractCrudController
                 'Inactif' => UserAccountStatus::INACTIVE->value,
                 'Suspendu' => UserAccountStatus::SUSPENDED->value,
                 'En attente de vérification' => UserAccountStatus::PENDING_VERIFICATION->value,
+                'Supprimé' => UserAccountStatus::DELETED->value,
             ]))
             ->add('roles');
     }
@@ -293,6 +294,7 @@ class UserCrudController extends AbstractCrudController
             UserAccountStatus::INACTIVE => 'secondary',
             UserAccountStatus::SUSPENDED => 'danger',
             UserAccountStatus::PENDING_VERIFICATION => 'warning',
+            UserAccountStatus::DELETED => 'dark',
         };
 
         return sprintf(

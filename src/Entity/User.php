@@ -101,6 +101,12 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface, TwoFact
     #[ORM\Column(length: 32, enumType: UserAccountStatus::class)]
     private UserAccountStatus $accountStatus = UserAccountStatus::ACTIVE;
 
+    #[ORM\Column(nullable: true)]
+    private ?\DateTimeImmutable $deletedAt = null;
+
+    #[ORM\Column(nullable: true)]
+    private ?\DateTimeImmutable $anonymizedAt = null;
+
     /**
      * @var Collection<int, Subscription>
      */
@@ -463,5 +469,34 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface, TwoFact
     public function isAccountActive(): bool
     {
         return $this->accountStatus->isActive();
+    }
+
+    public function getDeletedAt(): ?\DateTimeImmutable
+    {
+        return $this->deletedAt;
+    }
+
+    public function setDeletedAt(?\DateTimeImmutable $deletedAt): static
+    {
+        $this->deletedAt = $deletedAt;
+
+        return $this;
+    }
+
+    public function getAnonymizedAt(): ?\DateTimeImmutable
+    {
+        return $this->anonymizedAt;
+    }
+
+    public function setAnonymizedAt(?\DateTimeImmutable $anonymizedAt): static
+    {
+        $this->anonymizedAt = $anonymizedAt;
+
+        return $this;
+    }
+
+    public function isAnonymized(): bool
+    {
+        return $this->anonymizedAt !== null || $this->accountStatus === UserAccountStatus::DELETED;
     }
 }

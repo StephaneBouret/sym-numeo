@@ -3,7 +3,10 @@
 namespace App\Services;
 
 use App\Entity\User;
+use App\Enum\SubscriptionStatus;
+use App\Enum\UserAccountStatus;
 use Doctrine\ORM\EntityManagerInterface;
+use libphonenumber\PhoneNumberUtil;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 
 final class UserProfileService
@@ -11,6 +14,7 @@ final class UserProfileService
     public function __construct(
         private readonly EntityManagerInterface $em,
         private readonly UserPasswordHasherInterface $passwordHasher,
+        private readonly AvatarService $avatarService,
     ) {}
 
     public function updateProfile(User $user): void
@@ -34,8 +38,82 @@ final class UserProfileService
 
     public function deleteAccount(User $user): void
     {
-        $this->em->remove($user);
+        $this->anonymizeAccount($user);
+
         $this->em->flush();
+    }
+
+    private function anonymizeAccount(User $user): void
+    {
+        if ($user->isAnonymized()) {
+            return;
+        }
+
+        $now = new \DateTimeImmutable();
+        $anonymousEmail = $this->createAnonymousEmail($user);
+
+        $user
+            ->setFirstname('Utilisateur')
+            ->setLastname('Supprime')
+            ->setEmail($anonymousEmail)
+            ->setPhone(PhoneNumberUtil::getInstance()->parse('+33100000000', 'FR'))
+            ->setAdress('Adresse supprimee')
+            ->setPostalCode('75001')
+            ->setCity('Ville Supprimee')
+            ->setRoles(['ROLE_USER'])
+            ->setPassword($this->passwordHasher->hashPassword($user, bin2hex(random_bytes(32))))
+            ->setResetToken(null)
+            ->setResetTokenCreatedAt(null)
+            ->setAccountStatus(UserAccountStatus::DELETED)
+            ->setDeletedAt($now)
+            ->setAnonymizedAt($now);
+
+        $user->invalidateTrustedDevices();
+        $this->revokeDevices($user);
+
+        foreach ($user->getSubscriptions() as $subscription) {
+            $subscription->setEmail($anonymousEmail);
+
+            if (in_array($subscription->getStatus(), [
+                SubscriptionStatus::PENDING,
+                SubscriptionStatus::ACTIVE,
+                SubscriptionStatus::SUSPENDED,
+            ], true)) {
+                $subscription->cancel();
+            }
+        }
+
+        $invitation = $user->getInvitation();
+        if ($invitation !== null) {
+            $invitation
+                ->setEmail($this->createAnonymousInvitationEmail($user))
+                ->setToken(bin2hex(random_bytes(32)))
+                ->setExpiresAt($now);
+        }
+
+        $avatar = $user->getAvatar();
+        if ($avatar !== null) {
+            $this->avatarService->deleteAvatar($avatar);
+        }
+    }
+
+    private function revokeDevices(User $user): void
+    {
+        foreach ($user->getDevices() as $device) {
+            if ($device->isActive()) {
+                $device->revoke();
+            }
+        }
+    }
+
+    private function createAnonymousEmail(User $user): string
+    {
+        return sprintf('deleted-user-%s@example.invalid', $user->getId() ?? bin2hex(random_bytes(6)));
+    }
+
+    private function createAnonymousInvitationEmail(User $user): string
+    {
+        return sprintf('deleted-invitation-user-%s@example.invalid', $user->getId() ?? bin2hex(random_bytes(6)));
     }
 
     private function normalizeFirstname(string $value): string
@@ -61,7 +139,7 @@ final class UserProfileService
 
         return preg_replace_callback(
             '/[\p{L}\p{N}]+(?:[\'’\-][\p{L}\p{N}]+)*/u',
-            fn (array $matches): string => $this->normalizeAddressWord($matches[0]),
+            fn(array $matches): string => $this->normalizeAddressWord($matches[0]),
             $address
         ) ?? $address;
     }
@@ -110,7 +188,7 @@ final class UserProfileService
     {
         if (str_contains($word, '-')) {
             return implode('-', array_map(
-                fn (string $part): string => $this->titleAddressName($part),
+                fn(string $part): string => $this->titleAddressName($part),
                 explode('-', $word)
             ));
         }
