@@ -38,6 +38,9 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface, TwoFact
     #[ORM\Column(type: 'string', nullable: true)]
     private ?string $authCode = null;
 
+    #[ORM\Column(nullable: true)]
+    private ?\DateTimeImmutable $authCodeExpiresAt = null;
+
     #[ORM\Column(type: 'integer')]
     private int $trustedVersion = 0;
 
@@ -54,6 +57,9 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface, TwoFact
     private ?string $password = null;
 
     #[ORM\Column(length: 255)]
+    #[Assert\NotBlank(
+        message: 'Merci d\'indiquer votre prénom.',
+    )]
     #[Assert\Length(
         min: 3,
         max: 30,
@@ -63,6 +69,9 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface, TwoFact
     private ?string $firstname = null;
 
     #[ORM\Column(length: 255)]
+    #[Assert\NotBlank(
+        message: 'Merci d\'indiquer votre nom.',
+    )]
     #[Assert\Length(
         min: 2,
         minMessage: 'Votre nom doit comporter au moins {{ limit }} caractères.',
@@ -76,6 +85,9 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface, TwoFact
     private ?string $adress = null;
 
     #[ORM\Column(length: 255)]
+    #[Assert\NotBlank(
+        message: 'Merci d\'indiquer votre code postal.',
+    )]
     #[ZipCode([
         'iso' => 'FR',
         'message' => 'Le code postal n\'est pas valide.'
@@ -89,6 +101,9 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface, TwoFact
     private ?string $city = null;
 
     #[ORM\Column(type: 'phone_number')]
+    #[Assert\NotBlank(
+        message: 'Merci d\'indiquer votre numéro de téléphone.',
+    )]
     #[AssertPhoneNumber(defaultRegion: 'FR')]
     private ?PhoneNumber $phone = null;
 
@@ -200,17 +215,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface, TwoFact
         return $this;
     }
 
-    /**
-     * Ensure the session doesn't contain actual password hashes by CRC32C-hashing them, as supported since Symfony 7.3.
-     */
-    public function __serialize(): array
-    {
-        $data = (array) $this;
-        $data["\0" . self::class . "\0password"] = hash('crc32c', $this->password);
-
-        return $data;
-    }
-
     #[\Deprecated]
     public function eraseCredentials(): void
     {
@@ -299,6 +303,19 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface, TwoFact
         return trim("{$this->firstname} {$this->lastname}");
     }
 
+    /**
+     * Ensure the session doesn't contain actual password hashes by CRC32C-hashing them, as supported since Symfony 7.3.
+     */
+    public function __serialize(): array
+    {
+        $data = (array) $this;
+        if (null !== $this->password) {
+            $data["\0" . self::class . "\0password"] = hash('crc32c', $this->password);
+        }
+
+        return $data;
+    }
+
     public function getResetToken(): ?string
     {
         return $this->resetToken;
@@ -319,127 +336,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface, TwoFact
     public function setResetTokenCreatedAt(?\DateTimeImmutable $resetTokenCreatedAt): static
     {
         $this->resetTokenCreatedAt = $resetTokenCreatedAt;
-
-        return $this;
-    }
-
-    /**
-     * @return Collection<int, Subscription>
-     */
-    public function getSubscriptions(): Collection
-    {
-        return $this->subscriptions;
-    }
-
-    public function addSubscription(Subscription $subscription): static
-    {
-        if (!$this->subscriptions->contains($subscription)) {
-            $this->subscriptions->add($subscription);
-            $subscription->setUser($this);
-        }
-
-        return $this;
-    }
-
-    public function removeSubscription(Subscription $subscription): static
-    {
-        if ($this->subscriptions->removeElement($subscription)) {
-            // set the owning side to null (unless already changed)
-            if ($subscription->getUser() === $this) {
-                $subscription->setUser(null);
-            }
-        }
-
-        return $this;
-    }
-
-    public function getInvitation(): ?Invitation
-    {
-        return $this->invitation;
-    }
-
-    public function setInvitation(?Invitation $invitation): static
-    {
-        $this->invitation = $invitation;
-
-        if ($invitation !== null && $invitation->getUser() !== $this) {
-            $invitation->setUser($this);
-        }
-
-
-        return $this;
-    }
-
-    /**
-     * @return Collection<int, UserDevice>
-     */
-    public function getDevices(): Collection
-    {
-        return $this->devices;
-    }
-
-    public function addDevice(UserDevice $device): static
-    {
-        if (!$this->devices->contains($device)) {
-            $this->devices->add($device);
-            $device->setUser($this);
-        }
-
-        return $this;
-    }
-
-    public function isEmailAuthEnabled(): bool
-    {
-        return true; // This can be a persisted field to switch email code authentication on/off
-    }
-
-    public function getEmailAuthRecipient(): string
-    {
-        return $this->email;
-    }
-
-    public function getEmailAuthCode(): ?string
-    {
-        // if (null === $this->authCode) {
-        //     throw new \LogicException('The email authentication code was not set');
-        // }
-
-        return $this->authCode;
-    }
-
-    public function setEmailAuthCode(string $authCode): void
-    {
-        $this->authCode = $authCode;
-    }
-
-    public function getTrustedTokenVersion(): int
-    {
-        return $this->trustedVersion;
-    }
-
-    public function invalidateTrustedDevices(): void
-    {
-        $this->trustedVersion++;
-    }
-
-    public function getAvatar(): ?Avatar
-    {
-        return $this->avatar;
-    }
-
-    public function setAvatar(?Avatar $avatar): static
-    {
-        // unset the owning side of the relation if necessary
-        if ($avatar === null && $this->avatar !== null) {
-            $this->avatar->setUser(null);
-        }
-
-        // set the owning side of the relation if necessary
-        if ($avatar !== null && $avatar->getUser() !== $this) {
-            $avatar->setUser($this);
-        }
-
-        $this->avatar = $avatar;
 
         return $this;
     }
@@ -498,5 +394,133 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface, TwoFact
     public function isAnonymized(): bool
     {
         return $this->anonymizedAt !== null || $this->accountStatus === UserAccountStatus::DELETED;
+    }
+
+    /**
+     * @return Collection<int, Subscription>
+     */
+    public function getSubscriptions(): Collection
+    {
+        return $this->subscriptions;
+    }
+
+    public function addSubscription(Subscription $subscription): static
+    {
+        if (!$this->subscriptions->contains($subscription)) {
+            $this->subscriptions->add($subscription);
+            $subscription->setUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removeSubscription(Subscription $subscription): static
+    {
+        if ($this->subscriptions->removeElement($subscription)) {
+            // set the owning side to null (unless already changed)
+            if ($subscription->getUser() === $this) {
+                $subscription->setUser(null);
+            }
+        }
+
+        return $this;
+    }
+
+    public function getInvitation(): ?Invitation
+    {
+        return $this->invitation;
+    }
+
+    public function setInvitation(?Invitation $invitation): static
+    {
+        $this->invitation = $invitation;
+
+        if ($invitation !== null && $invitation->getUser() !== $this) {
+            $invitation->setUser($this);
+        }
+
+
+        return $this;
+    }
+
+    public function getAvatar(): ?Avatar
+    {
+        return $this->avatar;
+    }
+
+    public function setAvatar(?Avatar $avatar): static
+    {
+        // unset the owning side of the relation if necessary
+        if ($avatar === null && $this->avatar !== null) {
+            $this->avatar->setUser(null);
+        }
+
+        // set the owning side of the relation if necessary
+        if ($avatar !== null && $avatar->getUser() !== $this) {
+            $avatar->setUser($this);
+        }
+
+        $this->avatar = $avatar;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, UserDevice>
+     */
+    public function getDevices(): Collection
+    {
+        return $this->devices;
+    }
+
+    public function addDevice(UserDevice $device): static
+    {
+        if (!$this->devices->contains($device)) {
+            $this->devices->add($device);
+            $device->setUser($this);
+        }
+
+        return $this;
+    }
+
+    public function isEmailAuthEnabled(): bool
+    {
+        return true; // This can be a persisted field to switch email code authentication on/off
+    }
+
+    public function getEmailAuthRecipient(): string
+    {
+        return $this->email;
+    }
+
+    public function getEmailAuthCode(): ?string
+    {
+        if (null !== $this->authCodeExpiresAt && $this->authCodeExpiresAt < new \DateTimeImmutable()) {
+            return null;
+        }
+
+        return $this->authCode;
+    }
+
+    public function setEmailAuthCode(string $authCode): void
+    {
+        $this->authCode = $authCode;
+        $this->authCodeExpiresAt = new \DateTimeImmutable('+30 minutes');
+    }
+
+
+    public function clearEmailAuthCode(): void
+    {
+        $this->authCode = null;
+        $this->authCodeExpiresAt = null;
+    }
+
+    public function getTrustedTokenVersion(): int
+    {
+        return $this->trustedVersion;
+    }
+    public function invalidateTrustedDevices(): void
+    {
+        $this->trustedVersion++;
     }
 }
