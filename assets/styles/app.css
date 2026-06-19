@@ -156,6 +156,7 @@ html[data-bs-theme="dark"] {
 }
 
 html[data-bs-theme="dark"] .symnumeo-navbar .navbar-toggler-icon {
+    -webkit-filter: invert(1) grayscale(1) brightness(1.8);
     filter: invert(1) grayscale(1) brightness(1.8);
 }
 
@@ -276,7 +277,9 @@ html[data-bs-theme="dark"] .symnumeo-navbar .navbar-toggler-icon {
     color: var(--app-brand-contrast);
     font-weight: 700;
     line-height: 1;
+    -o-object-fit: cover;
     object-fit: cover;
+    -o-object-position: center;
     object-position: center;
 }
 
@@ -705,6 +708,18 @@ footer {
 /*--------------------------------------------------------------
 # Login page
 --------------------------------------------------------------*/
+.login-page {
+    padding-bottom: 48px;
+    padding-top: 48px;
+}
+
+.login-panel {
+    margin-bottom: 32px;
+    margin-top: 32px;
+    max-width: 480px;
+    width: 100%;
+}
+
 .card-fill {
     background-color: var(--app-input-bg) !important;
     background-clip: border-box !important;
@@ -731,6 +746,48 @@ footer {
 .my-8 {
     margin-top: 32px !important;
     margin-bottom: 32px !important;
+}
+
+@media (max-width: 575.98px) {
+    .login-page {
+        padding: 24px 14px 88px;
+    }
+
+    .login-page .card-fill .card-body {
+        align-items: stretch;
+        padding: 18px !important;
+    }
+
+    .login-panel {
+        margin-bottom: 16px;
+        margin-top: 16px;
+    }
+
+    .login-panel h1 {
+        font-size: 1.35rem !important;
+        line-height: 1.25;
+        margin-bottom: 1.5rem !important;
+    }
+
+    .login-panel .alert {
+        font-size: 0.95rem;
+        line-height: 1.45;
+        padding: 0.9rem 1rem;
+    }
+
+    .login-panel .form-group {
+        margin-bottom: 1rem !important;
+    }
+
+    .login-panel .btn[type="submit"] {
+        width: 100%;
+    }
+
+    .remember-me-label,
+    .login-panel .text-muted {
+        font-size: 0.98rem;
+        line-height: 1.45;
+    }
 }
 
 .lh-label {
@@ -2173,6 +2230,7 @@ html[data-bs-theme="dark"] .toggle-password-button:focus {
 }
 
 .profile-sidebar {
+    position: -webkit-sticky;
     position: sticky;
     top: 24px;
 }
@@ -2236,6 +2294,7 @@ html[data-bs-theme="dark"] .toggle-password-button:focus {
 
 .avatar-upload-preview img {
     height: 100%;
+    -o-object-fit: cover;
     object-fit: cover;
     width: 100%;
 }
@@ -2376,6 +2435,22 @@ html[data-bs-theme="dark"] .profile-page .input-group-text {
     background-color: var(--app-input-bg);
     border-color: var(--app-border);
     color: var(--app-input-text);
+}
+
+html[data-bs-theme="dark"] .profile-page .form-control::-webkit-input-placeholder {
+    color: var(--app-input-placeholder);
+}
+
+html[data-bs-theme="dark"] .profile-page .form-control::-moz-placeholder {
+    color: var(--app-input-placeholder);
+}
+
+html[data-bs-theme="dark"] .profile-page .form-control:-ms-input-placeholder {
+    color: var(--app-input-placeholder);
+}
+
+html[data-bs-theme="dark"] .profile-page .form-control::-ms-input-placeholder {
+    color: var(--app-input-placeholder);
 }
 
 html[data-bs-theme="dark"] .profile-page .form-control::placeholder {
