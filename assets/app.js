@@ -20,13 +20,17 @@ document.addEventListener("turbo:load", () => {
 });
 
 const closeAlertMessage = () => {
-    const alert = document.querySelector(".alert");
-    if (alert) {
+    document.querySelectorAll('[data-auto-dismiss="alert"]').forEach((alert) => {
+        if (alert.dataset.autoDismissBound === "true") {
+            return;
+        }
+
+        alert.dataset.autoDismissBound = "true";
         setTimeout(() => {
             alert.classList.add("fade-out");
-            setTimeout(() => alert.remove(), 1000); 
+            setTimeout(() => alert.remove(), 1000);
         }, 4000);
-    }
+    });
 };
 
 const initPage = () => {
@@ -34,5 +38,5 @@ const initPage = () => {
 }
 
 console.log("This log comes from assets/app.js - welcome to AssetMapper! 🎉");
-document.addEventListener('load', initPage);
+document.addEventListener('DOMContentLoaded', initPage);
 document.addEventListener('turbo:load', initPage);

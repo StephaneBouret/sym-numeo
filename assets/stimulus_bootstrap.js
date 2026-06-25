@@ -9,6 +9,7 @@ import AddressAutocompleteController from './controllers/address_autocomplete_co
 import TogglePasswordController from './controllers/toggle_password_controller.js';
 import AvatarUploadController from './controllers/avatar_upload_controller.js';
 import DeleteAccountController from './controllers/delete_account_controller.js';
+import ProfileEmailIdentifierController from './controllers/profile_email_identifier_controller.js';
 
 const app = startStimulusApp();
 // register any custom, 3rd party controllers here
@@ -23,3 +24,4 @@ app.register('address-autocomplete', AddressAutocompleteController);
 app.register('toggle-password', TogglePasswordController);
 app.register('avatar-upload', AvatarUploadController);
 app.register('delete-account', DeleteAccountController);
+app.register('profile-email-identifier', ProfileEmailIdentifierController);

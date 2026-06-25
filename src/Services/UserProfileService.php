@@ -32,6 +32,7 @@ final class UserProfileService
     public function updatePassword(User $user, string $plainPassword): void
     {
         $user->setPassword($this->passwordHasher->hashPassword($user, $plainPassword));
+        $user->invalidateTrustedDevices();
 
         $this->em->flush();
     }
@@ -68,6 +69,7 @@ final class UserProfileService
             ->setDeletedAt($now)
             ->setAnonymizedAt($now);
 
+        $user->clearPendingEmailChange();
         $user->invalidateTrustedDevices();
         $this->revokeDevices($user);
 
@@ -139,7 +141,7 @@ final class UserProfileService
 
         return preg_replace_callback(
             '/[\p{L}\p{N}]+(?:[\'’\-][\p{L}\p{N}]+)*/u',
-            fn(array $matches): string => $this->normalizeAddressWord($matches[0]),
+            fn (array $matches): string => $this->normalizeAddressWord($matches[0]),
             $address
         ) ?? $address;
     }
@@ -188,7 +190,7 @@ final class UserProfileService
     {
         if (str_contains($word, '-')) {
             return implode('-', array_map(
-                fn(string $part): string => $this->titleAddressName($part),
+                fn (string $part): string => $this->titleAddressName($part),
                 explode('-', $word)
             ));
         }
