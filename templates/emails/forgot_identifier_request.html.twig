@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="fr">
+	<head>
+		<meta charset="UTF-8">
+		<title>Demande d'aide pour identifiant oublié</title>
+	</head>
+	<body style="font-family: Arial, sans-serif; color: #111827; line-height: 1.6;">
+		<h1 style="font-size: 22px;">Demande d'aide pour identifiant oublié</h1>
+
+		<p>Une demande d'assistance vient d'être envoyée depuis SYM-NUMEO</p>
+
+		<table style="border-collapse: collapse; width: 100%; max-width: 640px;">
+			<tr>
+				<th align="left" style="padding: 8px; border-bottom: 1px solid #d6ebe3;">Nouvel identifiant souhaité</th>
+				<td style="padding: 8px; border-bottom: 1px solid #d6ebe3;">{{ requestedIdentifier }}</td>
+			</tr>
+			<tr>
+				<th align="left" style="padding: 8px; border-bottom: 1px solid #d6ebe3;">Prénom</th>
+				<td style="padding: 8px; border-bottom: 1px solid #d6ebe3;">{{ firstname }}</td>
+			</tr>
+			<tr>
+				<th align="left" style="padding: 8px; border-bottom: 1px solid #d6ebe3;">Nom</th>
+				<td style="padding: 8px; border-bottom: 1px solid #d6ebe3;">{{ lastname }}</td>
+			</tr>
+			<tr>
+				<th align="left" style="padding: 8px; border-bottom: 1px solid #d6ebe3;">Téléphone</th>
+				<td style="padding: 8px; border-bottom: 1px solid #d6ebe3;">{{ phone }}</td>
+			</tr>
+			<tr>
+				<th align="left" style="padding: 8px; border-bottom: 1px solid #d6ebe3;">Code postal</th>
+				<td style="padding: 8px; border-bottom: 1px solid #d6ebe3;">{{ postalCode|default('Non renseigné') }}</td>
+			</tr>
+			<tr>
+				<th align="left" style="padding: 8px; border-bottom: 1px solid #d6ebe3;">Message</th>
+				<td style="padding: 8px; border-bottom: 1px solid #d6ebe3;">{{ message|default('Non renseigné')|nl2br }}</td>
+			</tr>
+			<tr>
+				<th align="left" style="padding: 8px; border-bottom: 1px solid #e5e7eb;">IP</th>
+				<td style="padding: 8px; border-bottom: 1px solid #e5e7eb;">{{ ip|default('Inconnue') }}</td>
+			</tr>
+			<tr>
+				<th align="left" style="padding: 8px; border-bottom: 1px solid #e5e7eb;">User-Agent</th>
+				<td style="padding: 8px; border-bottom: 1px solid #e5e7eb;">{{ userAgent|default('Inconnu') }}</td>
+			</tr>
+			<tr>
+				<th align="left" style="padding: 8px;">Date</th>
+				<td style="padding: 8px;">{{ requestedAt|date('d/m/Y H:i') }}</td>
+			</tr>
+		</table>
+
+		<p>Répondez uniquement après vérification manuelle du compte concerné</p>
+	</body>
+</html>
