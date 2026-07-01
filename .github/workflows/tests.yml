@@ -18,6 +18,8 @@ jobs:
       mysql:
         image: mysql:8.4
         env:
+          APP_ENV: test
+          MAILER_DSN: 'null://null'
           MYSQL_ROOT_PASSWORD: root
           MYSQL_DATABASE: app_test
         ports:
