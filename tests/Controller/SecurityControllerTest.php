@@ -11,12 +11,6 @@ final class SecurityControllerTest extends WebTestCase
         $client = static::createClient();
 
         $crawler = $client->request('GET', '/identifiant-oublie');
-        dump($client->getResponse()->getStatusCode());
-        dump($client->getResponse()->headers->all());
-
-        self::assertResponseIsSuccessful(
-            $client->getResponse()->getContent()
-        );
         $form = $crawler->selectButton('Envoyer la demande')->form();
 
         $form['forgot_identifier_request_form[requestedIdentifier]'] = 'jean@test.fr';

@@ -56,5 +56,8 @@ jobs:
       - name: Install dependencies
         run: composer install -q --no-ansi --no-interaction --no-scripts --no-progress --prefer-dist --optimize-autoloader
 
+      - name: Install importmap assets
+        run: php bin/console importmap:install
+
       - name: Run PHPUnit
         run: php bin/phpunit
