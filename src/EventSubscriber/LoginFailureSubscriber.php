@@ -8,6 +8,7 @@ namespace App\EventSubscriber;
 use App\Entity\LoginFailureLog;
 use App\Entity\User;
 use App\Repository\UserRepository;
+use App\Service\Security\LoginFailureAlertService;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\Security\Http\Authenticator\Passport\Badge\UserBadge;
@@ -18,6 +19,7 @@ final readonly class LoginFailureSubscriber implements EventSubscriberInterface
     public function __construct(
         private EntityManagerInterface $em,
         private UserRepository $userRepository,
+        private LoginFailureAlertService $loginFailureAlertService,
     ) {}
 
     public static function getSubscribedEvents(): array
@@ -54,6 +56,10 @@ final readonly class LoginFailureSubscriber implements EventSubscriberInterface
 
         $this->em->persist($loginFailureLog);
         $this->em->flush();
+
+        if ($user instanceof User) {
+            $this->loginFailureAlertService->notifyIfNeeded($user, $loginFailureLog->getIpAddress());
+        }
     }
 
     private function extractUsernameAttempted(LoginFailureEvent $event): string
