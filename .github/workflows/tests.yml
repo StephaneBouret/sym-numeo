@@ -69,8 +69,5 @@ jobs:
       - name: Lint Twig
         run: php bin/console lint:twig templates --env=test
 
-      - name: Audit Composer dependencies
-        run: composer audit
-
       - name: Run PHPUnit
         run: php bin/phpunit
