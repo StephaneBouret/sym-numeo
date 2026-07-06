@@ -2,12 +2,12 @@
 
 namespace App\Entity;
 
-use libphonenumber\PhoneNumber;
 use App\Repository\CompanyRepository;
 use Doctrine\ORM\Mapping as ORM;
-use ZipCodeValidator\Constraints\ZipCode;
-use Symfony\Component\Validator\Constraints as Assert;
+use libphonenumber\PhoneNumber;
 use Misd\PhoneNumberBundle\Validator\Constraints\PhoneNumber as AssertPhoneNumber;
+use Symfony\Component\Validator\Constraints as Assert;
+use ZipCodeValidator\Constraints\ZipCode;
 
 #[ORM\Entity(repositoryClass: CompanyRepository::class)]
 class Company
@@ -42,7 +42,7 @@ class Company
     #[ORM\Column(length: 255)]
     #[ZipCode([
         'iso' => 'FR',
-        'message' => 'Le code postal n\'est pas valide'
+        'message' => 'Le code postal n\'est pas valide',
     ])]
     private ?string $postalCode = null;
 
@@ -63,7 +63,7 @@ class Company
     private ?PhoneNumber $phone = null;
 
     #[ORM\Column(length: 255)]
-    #[Assert\Choice(choices: [self::TYPE_ASSOCIATION, self::TYPE_EURL, self::TYPE_MICRO, self::TYPE_SARL, self::TYPE_SAS, self::TYPE_SASU], message: "Le type de contenu sélectionné est invalide.")]
+    #[Assert\Choice(choices: [self::TYPE_ASSOCIATION, self::TYPE_EURL, self::TYPE_MICRO, self::TYPE_SARL, self::TYPE_SAS, self::TYPE_SASU], message: 'Le type de contenu sélectionné est invalide.')]
     private ?string $type = null;
 
     #[ORM\Column(length: 255)]

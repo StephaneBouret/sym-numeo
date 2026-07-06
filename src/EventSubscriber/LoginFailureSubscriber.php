@@ -2,7 +2,6 @@
 
 declare(strict_types=1);
 
-
 namespace App\EventSubscriber;
 
 use App\Entity\LoginFailureLog;
@@ -20,7 +19,8 @@ final readonly class LoginFailureSubscriber implements EventSubscriberInterface
         private EntityManagerInterface $em,
         private UserRepository $userRepository,
         private LoginFailureAlertService $loginFailureAlertService,
-    ) {}
+    ) {
+    }
 
     public static function getSubscribedEvents(): array
     {

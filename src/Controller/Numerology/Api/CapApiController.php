@@ -17,15 +17,15 @@ final class CapApiController extends AbstractController
         Request $request,
         ValidatorInterface $validator,
         CapCalculator $calculator,
-        CapContentProvider $contentProvider
+        CapContentProvider $contentProvider,
     ): JsonResponse {
         $payload = json_decode($request->getContent() ?: '[]', true);
 
-        $firstNames = (string)($payload['firstNames'] ?? '');
-        $lastName   = (string)($payload['lastName'] ?? '');
-        $birthDate  = (string)($payload['birthDate'] ?? '');
+        $firstNames = (string) ($payload['firstNames'] ?? '');
+        $lastName = (string) ($payload['lastName'] ?? '');
+        $birthDate = (string) ($payload['birthDate'] ?? '');
 
-        if ($firstNames === '' || $lastName === '' || $birthDate === '') {
+        if ('' === $firstNames || '' === $lastName || '' === $birthDate) {
             return $this->json(['ok' => false, 'error' => 'Champs manquants.'], 422);
         }
 
@@ -54,7 +54,7 @@ final class CapApiController extends AbstractController
                 'aspiration' => $aspirationText,
                 'expression' => $expressionText,
                 'pair' => [
-                    'exists' => $pair !== null,
+                    'exists' => null !== $pair,
                     'axe' => $pair['axe'] ?? null,
                     'equilibriumKey' => $pair['equilibriumKey'] ?? null,
                     'paragraphs' => $pairParagraphs,

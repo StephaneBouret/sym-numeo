@@ -4,7 +4,6 @@ namespace App\Services;
 
 use App\Entity\User;
 use App\Repository\UserRepository;
-use App\Services\SendMailService;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
@@ -16,8 +15,9 @@ class PasswordResetService
         protected TokenGeneratorInterface $tokenGenerator,
         protected EntityManagerInterface $em,
         protected UrlGeneratorInterface $urlGenerator,
-        protected SendMailService $email
-    ) {}
+        protected SendMailService $email,
+    ) {
+    }
 
     public function processPasswordReset(User $user): void
     {
@@ -31,7 +31,7 @@ class PasswordResetService
 
         $context = [
             'url' => $url,
-            'user' => $user
+            'user' => $user,
         ];
 
         $this->email->sendMail(
@@ -61,8 +61,9 @@ class PasswordResetService
         $now = new \DateTimeImmutable();
 
         if (null === $resetTokenAt) {
-           return true;
+            return true;
         }
+
         return $now > $resetTokenAt->modify("+{$expirationInHours} hour");
     }
 

@@ -100,7 +100,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface, TwoFact
     )]
     #[ZipCode([
         'iso' => 'FR',
-        'message' => 'Le code postal n\'est pas valide.'
+        'message' => 'Le code postal n\'est pas valide.',
     ])]
     private ?string $postalCode = null;
 
@@ -349,9 +349,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface, TwoFact
     }
 
     /**
-     * Retourne le nom complet de l'utilisateur
-     *
-     * @return string
+     * Retourne le nom complet de l'utilisateur.
      */
     public function getFullname(): string
     {
@@ -365,7 +363,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface, TwoFact
     {
         $data = (array) $this;
         if (null !== $this->password) {
-            $data["\0" . self::class . "\0password"] = hash('crc32c', $this->password);
+            $data["\0".self::class."\0password"] = hash('crc32c', $this->password);
         }
 
         return $data;
@@ -448,7 +446,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface, TwoFact
 
     public function isAnonymized(): bool
     {
-        return $this->anonymizedAt !== null || $this->accountStatus === UserAccountStatus::DELETED;
+        return null !== $this->anonymizedAt || UserAccountStatus::DELETED === $this->accountStatus;
     }
 
     /**
@@ -490,10 +488,9 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface, TwoFact
     {
         $this->invitation = $invitation;
 
-        if ($invitation !== null && $invitation->getUser() !== $this) {
+        if (null !== $invitation && $invitation->getUser() !== $this) {
             $invitation->setUser($this);
         }
-
 
         return $this;
     }
@@ -506,12 +503,12 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface, TwoFact
     public function setAvatar(?Avatar $avatar): static
     {
         // unset the owning side of the relation if necessary
-        if ($avatar === null && $this->avatar !== null) {
+        if (null === $avatar && null !== $this->avatar) {
             $this->avatar->setUser(null);
         }
 
         // set the owning side of the relation if necessary
-        if ($avatar !== null && $avatar->getUser() !== $this) {
+        if (null !== $avatar && $avatar->getUser() !== $this) {
             $avatar->setUser($this);
         }
 
@@ -563,7 +560,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface, TwoFact
         $this->authCodeExpiresAt = new \DateTimeImmutable('+30 minutes');
     }
 
-
     public function clearEmailAuthCode(): void
     {
         $this->authCode = null;
@@ -574,8 +570,9 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface, TwoFact
     {
         return $this->trustedVersion;
     }
+
     public function invalidateTrustedDevices(): void
     {
-        $this->trustedVersion++;
+        ++$this->trustedVersion;
     }
 }

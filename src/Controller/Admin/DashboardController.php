@@ -20,6 +20,7 @@ class DashboardController extends AbstractDashboardController
         //
         // 1.2) Same example but using the "ugly URLs" that were used in previous EasyAdmin versions:
         $adminUrlGenerator = $this->container->get(AdminUrlGeneratorInterface::class);
+
         return $this->redirect($adminUrlGenerator->setController(CompanyCrudController::class)->generateUrl());
     }
 

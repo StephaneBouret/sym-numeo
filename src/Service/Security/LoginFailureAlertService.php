@@ -25,7 +25,8 @@ class LoginFailureAlertService
         private readonly MailerInterface $mailer,
         private readonly EntityManagerInterface $entityManager,
         private readonly string $defaultFrom,
-    ) {}
+    ) {
+    }
 
     public function notifyIfNeeded(User $user, ?string $ipAddress = null): void
     {

@@ -15,7 +15,8 @@ final class UserProfileService
         private readonly EntityManagerInterface $em,
         private readonly UserPasswordHasherInterface $passwordHasher,
         private readonly AvatarService $avatarService,
-    ) {}
+    ) {
+    }
 
     public function updateProfile(User $user): void
     {
@@ -86,7 +87,7 @@ final class UserProfileService
         }
 
         $invitation = $user->getInvitation();
-        if ($invitation !== null) {
+        if (null !== $invitation) {
             $invitation
                 ->setEmail($this->createAnonymousInvitationEmail($user))
                 ->setToken(bin2hex(random_bytes(32)))
@@ -94,7 +95,7 @@ final class UserProfileService
         }
 
         $avatar = $user->getAvatar();
-        if ($avatar !== null) {
+        if (null !== $avatar) {
             $this->avatarService->deleteAvatar($avatar);
         }
     }
@@ -148,7 +149,7 @@ final class UserProfileService
 
     private function normalizeAddressWord(string $word): string
     {
-        if (preg_match('/^\d+$/', $word) === 1) {
+        if (1 === preg_match('/^\d+$/', $word)) {
             return $word;
         }
 
@@ -179,8 +180,8 @@ final class UserProfileService
             return $word;
         }
 
-        if (preg_match('/^([dl])([\'’])(.+)$/u', $word, $matches) === 1) {
-            return $matches[1] . $matches[2] . $this->titleAddressName($matches[3]);
+        if (1 === preg_match('/^([dl])([\'’])(.+)$/u', $word, $matches)) {
+            return $matches[1].$matches[2].$this->titleAddressName($matches[3]);
         }
 
         return $this->titleAddressName($word);

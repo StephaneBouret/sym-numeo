@@ -74,16 +74,18 @@ class SecurityController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
             $user = $userRepository->findOneBy([
-                'email' => $form->get('email')->getData()
+                'email' => $form->get('email')->getData(),
             ]);
 
             if ($user) {
                 $passwordResetService->processPasswordReset($user);
                 $this->addFlash('success', 'Email envoyé avec succès');
+
                 return $this->redirectToRoute('app_login');
             }
             // $user est null
             $this->addFlash('danger', 'Un problème est survenu');
+
             return $this->redirectToRoute('app_login');
         }
 
@@ -99,11 +101,13 @@ class SecurityController extends AbstractController
 
         if (!$user) {
             $this->addFlash('danger', 'Jeton invalide');
+
             return $this->redirectToRoute('app_login');
         }
 
         if ($passwordResetService->isTokenExpired($user)) {
             $this->addFlash('warning', 'Votre demande de mot de passe a expiré. Merci de la renouveller.');
+
             return $this->redirectToRoute('app_forgot_pw');
         }
 
@@ -124,11 +128,12 @@ class SecurityController extends AbstractController
 
             $passwordResetService->updatePassword($user, $plainPassword, $hasher);
             $this->addFlash('success', 'Mot de passe changé avec succès');
+
             return $this->redirectToRoute('app_login');
         }
 
         return $this->render('security/reset_password.html.twig', [
-            'passForm' => $form
+            'passForm' => $form,
         ]);
     }
 }

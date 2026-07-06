@@ -22,7 +22,7 @@ final class SubscriptionCheckoutController extends AbstractController
     public function index(
         Request $request,
         SubscriptionRepository $subscriptionRepository,
-        EntityManagerInterface $em
+        EntityManagerInterface $em,
     ): Response {
         /** @var User $user */
         $user = $this->getUser();

@@ -9,7 +9,9 @@ use Symfony\Component\String\Slugger\SluggerInterface;
 
 final class EasyAdminSlugSubscriber implements EventSubscriberInterface
 {
-    public function __construct(private SluggerInterface $slugger) {}
+    public function __construct(private SluggerInterface $slugger)
+    {
+    }
 
     public static function getSubscribedEvents(): array
     {
@@ -53,7 +55,7 @@ final class EasyAdminSlugSubscriber implements EventSubscriberInterface
     {
         $name = trim((string) $entity->getName());
 
-        if ($name == '') {
+        if ('' == $name) {
             return;
         }
 
@@ -64,8 +66,9 @@ final class EasyAdminSlugSubscriber implements EventSubscriberInterface
         $newSlug = (string) $this->slugger->slug($normalizedName)->lower();
         $currentSlug = (string) ($entity->getSlug() ?? '');
 
-        if ($isNew || $currentSlug === '') {
+        if ($isNew || '' === $currentSlug) {
             $entity->setSlug($newSlug);
+
             return;
         }
 

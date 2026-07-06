@@ -8,17 +8,18 @@ use Symfony\Component\Mime\Address;
 
 class SendMailService
 {
-    public function __construct(protected MailerInterface $mailer, protected string $defaultFrom) {}
+    public function __construct(protected MailerInterface $mailer, protected string $defaultFrom)
+    {
+    }
 
-        public function sendMail(
+    public function sendMail(
         string $name,
         string $to,
         string $subject,
         string $template,
         array $context,
         ?string $from = null,
-    )
-    {
+    ) {
         $email = new TemplatedEmail();
         $email->from(new Address($from ?? $this->defaultFrom, $name))
             ->to($to)

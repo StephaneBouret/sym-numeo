@@ -12,7 +12,8 @@ final class TwoFactorAuthenticationCompleteSubscriber implements EventSubscriber
 {
     public function __construct(
         private readonly EntityManagerInterface $em,
-    ) {}
+    ) {
+    }
 
     public static function getSubscribedEvents(): array
     {
@@ -33,4 +34,3 @@ final class TwoFactorAuthenticationCompleteSubscriber implements EventSubscriber
         $this->em->flush();
     }
 }
-

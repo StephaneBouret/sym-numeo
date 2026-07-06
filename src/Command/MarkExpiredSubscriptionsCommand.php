@@ -19,8 +19,7 @@ class MarkExpiredSubscriptionsCommand extends Command
     public function __construct(
         private readonly SubscriptionRepository $subscriptionRepository,
         private readonly EntityManagerInterface $em,
-    )
-    {
+    ) {
         parent::__construct();
     }
 
@@ -28,7 +27,7 @@ class MarkExpiredSubscriptionsCommand extends Command
     {
         $subscriptions = $this->subscriptionRepository->findExpiredAnnualSubscriptions();
 
-        if ($subscriptions === []) {
+        if ([] === $subscriptions) {
             $output->writeln('Aucun abonnement à expirer.');
 
             return Command::SUCCESS;

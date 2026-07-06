@@ -13,7 +13,7 @@ final class InvitationController extends AbstractController
     #[Route('/{token}', name: 'app_invitation_claim', methods: ['GET'])]
     public function __invoke(
         string $token,
-        InvitationRepository $invitationRepository
+        InvitationRepository $invitationRepository,
     ): Response {
         $invitation = $invitationRepository->findOneBy([
             'token' => $token,
@@ -21,16 +21,19 @@ final class InvitationController extends AbstractController
 
         if (!$invitation) {
             $this->addFlash('warning', 'Cette invitation est introuvable.');
+
             return $this->redirectToRoute('app_home');
         }
 
         if ($invitation->isUsed()) {
             $this->addFlash('warning', 'Cette invitation a déjà été utilisée.');
+
             return $this->redirectToRoute('app_login');
         }
 
         if ($invitation->isExpired()) {
             $this->addFlash('warning', 'Cette invitation a expiré.');
+
             return $this->redirectToRoute('app_home');
         }
 

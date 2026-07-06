@@ -24,5 +24,6 @@ final class UserChecker implements UserCheckerInterface
     }
 
     public function checkPostAuth(UserInterface $user, ?TokenInterface $token = null): void
-    {}
+    {
+    }
 }

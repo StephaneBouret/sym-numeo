@@ -3,17 +3,17 @@
 namespace App\Controller\Admin;
 
 use App\Entity\Company;
-use libphonenumber\PhoneNumberFormat;
-use EasyCorp\Bundle\EasyAdminBundle\Config\Crud;
-use EasyCorp\Bundle\EasyAdminBundle\Field\IdField;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Actions;
-use EasyCorp\Bundle\EasyAdminBundle\Field\UrlField;
-use EasyCorp\Bundle\EasyAdminBundle\Field\TextField;
-use EasyCorp\Bundle\EasyAdminBundle\Field\EmailField;
-use Misd\PhoneNumberBundle\Form\Type\PhoneNumberType;
-use EasyCorp\Bundle\EasyAdminBundle\Field\ChoiceField;
-use Misd\PhoneNumberBundle\Templating\Helper\PhoneNumberHelper;
+use EasyCorp\Bundle\EasyAdminBundle\Config\Crud;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
+use EasyCorp\Bundle\EasyAdminBundle\Field\ChoiceField;
+use EasyCorp\Bundle\EasyAdminBundle\Field\EmailField;
+use EasyCorp\Bundle\EasyAdminBundle\Field\IdField;
+use EasyCorp\Bundle\EasyAdminBundle\Field\TextField;
+use EasyCorp\Bundle\EasyAdminBundle\Field\UrlField;
+use libphonenumber\PhoneNumberFormat;
+use Misd\PhoneNumberBundle\Form\Type\PhoneNumberType;
+use Misd\PhoneNumberBundle\Templating\Helper\PhoneNumberHelper;
 
 class CompanyCrudController extends AbstractCrudController
 {
@@ -41,6 +41,7 @@ class CompanyCrudController extends AbstractCrudController
     public function configureActions(Actions $actions): Actions
     {
         $actions = parent::configureActions($actions);
+
         return $actions;
     }
 
@@ -52,7 +53,7 @@ class CompanyCrudController extends AbstractCrudController
             Company::TYPE_MICRO,
             Company::TYPE_SARL,
             Company::TYPE_SAS,
-            Company::TYPE_SASU
+            Company::TYPE_SASU,
         ];
 
         return [
@@ -80,7 +81,7 @@ class CompanyCrudController extends AbstractCrudController
                     'default_region' => 'FR',
                     'format' => PhoneNumberFormat::NATIONAL,
                     'number_type' => PhoneNumberType::NUMBER_TYPE_TEL,
-                    'attr' => ['placeholder' => 'Téléphone de l\'entreprise']
+                    'attr' => ['placeholder' => 'Téléphone de l\'entreprise'],
                 ])
                 ->setColumns(6)
                 ->onlyOnForms(),
@@ -88,6 +89,7 @@ class CompanyCrudController extends AbstractCrudController
                 ->formatValue(function ($value, $entity) {
                     $value = $entity->getPhone();
                     $formattedValue = $this->phoneNumberHelper->format($value, 2);
+
                     return $formattedValue;
                 })
                 ->onlyOnIndex(),
