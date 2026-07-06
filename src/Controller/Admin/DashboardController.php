@@ -48,6 +48,12 @@ class DashboardController extends AbstractDashboardController
             MenuItem::section('Utilisateurs'),
             MenuItem::linkTo(UserCrudController::class, 'Utilisateurs', 'fas fa-user'),
 
+            MenuItem::section('Sécurité'),
+            MenuItem::subMenu('Sécurité', 'fa-solid fa-shield-halved')->setSubItems([
+                MenuItem::linkTo(LoginFailureLogCrudController::class, 'Tentatives de connexion', 'fa-solid fa-right-to-bracket'),
+                MenuItem::linkTo(LoginFailureAlertCrudController::class, 'Alertes de sécurité', 'fa-solid fa-triangle-exclamation'),
+            ]),
+
             MenuItem::section('Site'),
             MenuItem::linkToUrl('Retour au site', 'fas fa-home', $this->generateUrl('app_home')),
         ];
