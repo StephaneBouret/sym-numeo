@@ -29,7 +29,13 @@ final class RegistrationController extends AbstractController
     ): Response {
         // Gestion propre du _target_path
         $session = $requestStack->getSession();
-        $targetPath = $request->query->get('_target_path', $session->get('_security.main.target_path'));
+        $sessionTargetPath = $session->get('_security.main.target_path');
+
+        if (!is_string($sessionTargetPath)) {
+            $sessionTargetPath = null;
+        }
+
+        $targetPath = $request->query->get('_target_path', $sessionTargetPath);
 
         if ($targetPath) {
             $session->set('_security.main.target_path', $targetPath);

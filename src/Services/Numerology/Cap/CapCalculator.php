@@ -14,6 +14,9 @@ final class CapCalculator
     // Maîtres-nombres
     private const MASTER_NUMBERS = [11, 22, 33, 44, 55, 66, 77, 88, 99];
 
+    /**
+     * @return array{aspiration?: int, expression?: int, axe?: int, vigilance?: int}
+     */
     public function calculate(string $firstNames, string $lastName, \DateTimeImmutable $birthDate): array
     {
         $identity = $this->normalize($firstNames.' '.$lastName);

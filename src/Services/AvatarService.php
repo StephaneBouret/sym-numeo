@@ -7,6 +7,7 @@ use App\Entity\User;
 use App\Repository\AvatarRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Imagine\Gd\Imagine;
+use Imagine\Image\AbstractFont;
 use Imagine\Image\Box;
 use Imagine\Image\Palette\RGB;
 use Imagine\Image\Point;
@@ -153,6 +154,7 @@ final class AvatarService
         $image = $imagine->create($size, $palette->color('#232323'));
 
         $initial = $this->getInitial($user);
+        /** @var AbstractFont $font */
         $font = $imagine->font($fontPath, 220, $palette->color('#FFFFFF'));
         $textBox = $font->box($initial);
 

@@ -36,17 +36,12 @@ final class ProfileController extends AbstractController
         $currentEmail = (string) $user->getEmail();
 
         $avatar = $user->getAvatar() ?? new Avatar($user);
+
         $avatarForm = $this->createForm(AvatarFormType::class, $avatar, [
             'allow_delete' => false,
             'image_uri' => false,
         ]);
         $avatarForm->handleRequest($request);
-
-        if ($avatarService->handleAvatarForm($avatarForm, $user, $avatar)) {
-            $this->addFlash('success', 'Votre avatar a bien été mis à jour.');
-
-            return $this->redirectToRoute('app_profile');
-        }
 
         $passwordForm = $this->createForm(UpdatePasswordUserFormType::class, $user);
         $passwordForm->handleRequest($request);
@@ -56,27 +51,37 @@ final class ProfileController extends AbstractController
         ]);
         $profileForm->handleRequest($request);
 
+        if ($avatarService->handleAvatarForm($avatarForm, $user, $avatar)) {
+            $this->addFlash('success', 'Votre avatar a bien été mis à jour.');
+
+            return $this->redirectToRoute('app_profile');
+        }
+
         if ($profileForm->isSubmitted() && $profileForm->isValid()) {
             $requestedEmail = $emailChangeService->normalizeEmail((string) $profileForm->get('email')->getData());
             $emailChanged = $requestedEmail !== $emailChangeService->normalizeEmail($currentEmail);
+            $hasProfileError = false;
 
             if ($emailChanged) {
                 $emailChangePassword = (string) $profileForm->get('emailChangePassword')->getData();
 
                 if ('' === trim($emailChangePassword)) {
                     $profileForm->get('emailChangePassword')->addError(new FormError('Merci de confirmer le changement d\'identifiant avec votre mot de passe actuel.'));
+                    $hasProfileError = true;
                 } elseif (!$passwordHasher->isPasswordValid($user, $emailChangePassword)) {
                     $profileForm->get('emailChangePassword')->addError(new FormError('Le mot de passe actuel est incorrect.'));
+                    $hasProfileError = true;
                 }
 
                 try {
                     $emailChangeService->assertEmailCanBeRequested($user, $requestedEmail);
                 } catch (\InvalidArgumentException $exception) {
                     $profileForm->get('email')->addError(new FormError($exception->getMessage()));
+                    $hasProfileError = true;
                 }
             }
 
-            if (!$profileForm->isValid()) {
+            if ($hasProfileError) {
                 return $this->render('profile/edit.html.twig', [
                     'user' => $user,
                     'avatarForm' => $avatarForm,

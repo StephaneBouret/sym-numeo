@@ -31,7 +31,7 @@ class UserFixtures extends Fixture implements FixtureGroupInterface
         $admin = new User();
         $hash = $this->passwordHasher->hashPassword($admin, 'password');
 
-        $adminRawPhoneNumber = $faker->mobileNumber();
+        $adminRawPhoneNumber = $faker->phoneNumber();
         $adminPhoneNumberObject = $phoneNumberUtil->parse($adminRawPhoneNumber, 'FR');
 
         $admin->setEmail('admin@gmail.com')
@@ -53,7 +53,7 @@ class UserFixtures extends Fixture implements FixtureGroupInterface
             $user = new User();
             $hash = $this->passwordHasher->hashPassword($user, 'password');
 
-            $rawPhoneNumber = $faker->mobileNumber();
+            $rawPhoneNumber = $faker->phoneNumber();
             $phoneNumberObject = $phoneNumberUtil->parse($rawPhoneNumber, 'FR');
 
             $user->setEmail("user$u@gmail.com")

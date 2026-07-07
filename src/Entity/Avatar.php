@@ -123,6 +123,9 @@ class Avatar
         ];
     }
 
+    /**
+     * @param array{id: int|null, imageName: string|null, updatedAt: \DateTimeImmutable|null, user: User|null} $data
+     */
     public function __unserialize(array $data): void
     {
         $this->id = $data['id'];

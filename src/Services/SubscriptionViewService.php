@@ -6,6 +6,9 @@ use App\Entity\Subscription;
 
 class SubscriptionViewService
 {
+    /**
+     * @return array{remainingDays: int|null, progress: int, isLifetime: bool}
+     */
     public function build(?Subscription $subscription): array
     {
         if (!$subscription) {

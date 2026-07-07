@@ -12,6 +12,9 @@ class SendMailService
     {
     }
 
+    /**
+     * @param array<string, mixed> $context
+     */
     public function sendMail(
         string $name,
         string $to,
@@ -19,7 +22,7 @@ class SendMailService
         string $template,
         array $context,
         ?string $from = null,
-    ) {
+    ): void {
         $email = new TemplatedEmail();
         $email->from(new Address($from ?? $this->defaultFrom, $name))
             ->to($to)

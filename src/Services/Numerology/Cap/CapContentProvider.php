@@ -8,6 +8,20 @@ use Symfony\Component\HttpKernel\KernelInterface;
 
 final class CapContentProvider
 {
+    /**
+     * @var array{
+     *     meta?: array<string, string>,
+     *     aspirations: array<array-key, string>,
+     *     expressions: array<array-key, string>,
+     *     pairs: array<string, array{
+     *         aspiration?: int,
+     *         expression?: int,
+     *         axe?: int,
+     *         equilibriumKey?: int,
+     *         text?: string|list<string>
+     *     }>
+     * }
+     */
     private array $data;
 
     public function __construct(KernelInterface $kernel)
@@ -19,10 +33,14 @@ final class CapContentProvider
             throw new \RuntimeException('Impossible de lire cap_fr.json');
         }
 
+        /** @var array{meta?: array<string, string>, aspirations: array<array-key, string>, expressions: array<array-key, string>, pairs: array<string, array{aspiration?: int, expression?: int, axe?: int, equilibriumKey?: int, text?: string|list<string>}>} $data */
         $data = json_decode($json, true, flags: JSON_THROW_ON_ERROR);
         $this->data = $data;
     }
 
+    /**
+     * @return array{aspiration?: int, expression?: int, axe?: int, equilibriumKey?: int, text?: string|list<string>}|null
+     */
     public function getPair(int $aspiration, int $expression): ?array
     {
         $key = $aspiration.'-'.$expression;
@@ -40,6 +58,9 @@ final class CapContentProvider
         return $this->data['expressions'][(string) $n] ?? null;
     }
 
+    /**
+     * @return list<string>|null
+     */
     public function getPairParagraphs(int $aspiration, int $expression): ?array
     {
         $pair = $this->getPair($aspiration, $expression);

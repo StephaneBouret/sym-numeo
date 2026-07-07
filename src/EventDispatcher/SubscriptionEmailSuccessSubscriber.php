@@ -12,7 +12,6 @@ class SubscriptionEmailSuccessSubscriber implements EventSubscriberInterface
     public function __construct(
         private readonly SendMailService $sendMail,
         private readonly UrlGeneratorInterface $urlGenerator,
-        private readonly string $defaultFrom,
     ) {
     }
 
