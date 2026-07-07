@@ -56,15 +56,15 @@ class RegistrationFormType extends AbstractType
                     'placeholder' => '••••••••',
                 ],
                 'constraints' => [
-                    new NotBlank([
-                        'message' => 'Merci de renseigner un mot de passe.',
-                    ]),
-                    new Length([
-                        'min' => 6,
-                        'minMessage' => 'Votre mot de passe doit avoir au minimum {{ limit }} caractères',
+                    new NotBlank(
+                        message: 'Merci de renseigner un mot de passe.',
+                    ),
+                    new Length(
+                        min: 6,
+                        minMessage: 'Votre mot de passe doit avoir au minimum {{ limit }} caractères',
                         // max length allowed by Symfony for security reasons
-                        'max' => 4096,
-                    ]),
+                        max: 4096,
+                    ),
                     new PasswordStrength(
                         minScore: PasswordStrength::STRENGTH_STRONG,
                         message: 'Le mot de passe est trop faible. Veuillez utiliser un mot de passe plus fort.'
