@@ -79,7 +79,7 @@ jobs:
         run: php bin/console doctrine:migrations:migrate --env=test --no-interaction --allow-no-migration
 
       - name: Load database fixtures
-        run: php bin/console doctrine:fixtures:load --env=test --no-interaction --purge-with-truncate
+        run: php bin/console doctrine:fixtures:load --env=test --no-interaction --append
 
       - name: Run PHPUnit
         run: php bin/phpunit
