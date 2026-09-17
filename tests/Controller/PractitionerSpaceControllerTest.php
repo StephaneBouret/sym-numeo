@@ -500,7 +500,7 @@ class PractitionerSpaceControllerTest extends WebTestCase
                 ->setIsLifetime(false)
                 ->setStartsAt($now)
                 ->setEndsAt($now->modify('+1 year'))
-                ->setPaymentReference('TEST-' . $label)
+                ->setPaymentReference('TEST-'.$label)
                 ->setTermsAcceptedAt($now)
                 ->setImmediateAccessRequestedAt($now)
                 ->setWithdrawalRightWaivedAt($now);
@@ -540,8 +540,8 @@ class PractitionerSpaceControllerTest extends WebTestCase
         $this->ensureUploadDirectoryExists();
 
         $profile = (new ProfessionalProfile($user))
-            ->setProfessionalName('Cabinet ' . $clientOriginalName)
-            ->setEmail('cabinet-' . $this->persistedUserId($user) . '@example.test')
+            ->setProfessionalName('Cabinet '.$clientOriginalName)
+            ->setEmail('cabinet-'.$this->persistedUserId($user).'@example.test')
             ->setPostalCode('75001')
             ->setCity('Paris');
 
@@ -712,7 +712,7 @@ class PractitionerSpaceControllerTest extends WebTestCase
             throw new \RuntimeException('Impossible de créer un fichier temporaire.');
         }
 
-        $pngPath = $temporaryFile . '.png';
+        $pngPath = $temporaryFile.'.png';
 
         if (!rename($temporaryFile, $pngPath)) {
             throw new \RuntimeException('Impossible de préparer le fichier PNG temporaire.');
@@ -740,7 +740,7 @@ class PractitionerSpaceControllerTest extends WebTestCase
     {
         $testToken = (string) ($_SERVER['TEST_TOKEN'] ?? $_ENV['TEST_TOKEN'] ?? '');
 
-        return $this->projectDir() . '/var/test-uploads/professional-logos' . $testToken;
+        return $this->projectDir().'/var/test-uploads/professional-logos'.$testToken;
     }
 
     private function professionalLogoPath(string $imageName): string
@@ -749,7 +749,7 @@ class PractitionerSpaceControllerTest extends WebTestCase
             throw new \InvalidArgumentException('Le nom de fichier du logo ne doit pas contenir de chemin.');
         }
 
-        return $this->professionalLogoUploadDirectory() . DIRECTORY_SEPARATOR . $imageName;
+        return $this->professionalLogoUploadDirectory().DIRECTORY_SEPARATOR.$imageName;
     }
 
     /**
@@ -767,8 +767,8 @@ class PractitionerSpaceControllerTest extends WebTestCase
 
         $files = array_values(array_filter(
             $entries,
-            fn(string $entry): bool => !in_array($entry, ['.', '..'], true)
-                && is_file($this->professionalLogoUploadDirectory() . DIRECTORY_SEPARATOR . $entry),
+            fn (string $entry): bool => !in_array($entry, ['.', '..'], true)
+                && is_file($this->professionalLogoUploadDirectory().DIRECTORY_SEPARATOR.$entry),
         ));
 
         sort($files);

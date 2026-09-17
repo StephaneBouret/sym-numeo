@@ -14,7 +14,8 @@ final class ProfessionalProfileService
 {
     public function __construct(
         private readonly EntityManagerInterface $em,
-    ) {}
+    ) {
+    }
 
     public function save(User $user, ProfessionalProfile $profile, ?UploadedFile $logoFile, bool $flush = true): ?ProfessionalProfile
     {

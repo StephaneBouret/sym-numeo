@@ -365,10 +365,10 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface, TwoFact
     public function __serialize(): array
     {
         $data = (array) $this;
-        unset($data["\0" . self::class . "\0professionalProfile"]);
+        unset($data["\0".self::class."\0professionalProfile"]);
 
         if (null !== $this->password) {
-            $data["\0" . self::class . "\0password"] = hash('crc32c', $this->password);
+            $data["\0".self::class."\0password"] = hash('crc32c', $this->password);
         }
 
         return $data;

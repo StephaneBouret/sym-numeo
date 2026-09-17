@@ -93,8 +93,7 @@ final class PractitionerSpaceController extends AbstractController
         ProfessionalProfileService $professionalProfileService,
         UserActiveSubscriptionService $activeSubscriptionService,
         LoggerInterface $logger,
-    ): JsonResponse
-    {
+    ): JsonResponse {
         $user = $this->getUser();
 
         if (!$user instanceof User) {
