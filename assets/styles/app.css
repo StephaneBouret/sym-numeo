@@ -2507,3 +2507,521 @@ html[data-bs-theme="dark"] .profile-page .text-muted {
         width: 100%;
     }
 }
+
+/*--------------------------------------------------------------
+# Practitioner space
+--------------------------------------------------------------*/
+.practitioner-space-page {
+    background-color: var(--app-surface);
+    color: var(--app-text);
+    min-height: 100vh;
+    padding: 32px 20px;
+}
+
+.practitioner-shell {
+    background-color: var(--app-bg);
+    border: 1px solid var(--app-border);
+    border-radius: 8px;
+    box-shadow: 0 18px 42px rgba(15, 23, 42, 0.08);
+    margin: 0 auto;
+    max-width: 1180px;
+    overflow: hidden;
+}
+
+.practitioner-header {
+    align-items: center;
+    border-bottom: 1px solid var(--app-border);
+    display: grid;
+    gap: 24px;
+    grid-template-columns: minmax(150px, 0.75fr) minmax(0, 2fr) 44px;
+    padding: 18px 24px;
+}
+
+.practitioner-brand {
+    align-items: center;
+    color: var(--app-text);
+    display: inline-flex;
+    font-size: 1.1rem;
+    font-weight: 700;
+    gap: 8px;
+    text-decoration: none;
+}
+
+.practitioner-brand:hover,
+.practitioner-brand:focus {
+    color: var(--app-primary);
+}
+
+.practitioner-brand:focus-visible,
+.practitioner-theme-button:focus-visible {
+    outline: 3px solid var(--app-focus-ring);
+    outline-offset: 3px;
+}
+
+.practitioner-brand img {
+    height: 38px;
+    object-fit: contain;
+    width: auto;
+}
+
+.practitioner-steps {
+    display: grid;
+    gap: 8px;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+.practitioner-step {
+    align-items: center;
+    border: 1px solid var(--app-border);
+    border-radius: 8px;
+    color: var(--app-muted);
+    display: flex;
+    font-size: 0.875rem;
+    gap: 7px;
+    justify-content: center;
+    min-height: 38px;
+    padding: 6px 10px;
+    text-align: center;
+}
+
+.practitioner-step.active {
+    border-color: var(--app-primary);
+    color: var(--app-text);
+    font-weight: 700;
+}
+
+.practitioner-step-number {
+    align-items: center;
+    background-color: var(--app-surface);
+    border-radius: 50%;
+    display: inline-flex;
+    flex: 0 0 24px;
+    font-size: 0.75rem;
+    height: 24px;
+    justify-content: center;
+    width: 24px;
+}
+
+.practitioner-step.active .practitioner-step-number {
+    background-color: var(--app-primary);
+    color: var(--app-primary-contrast);
+}
+
+.practitioner-theme-button {
+    align-items: center;
+    background-color: transparent;
+    border: 1px solid var(--app-border);
+    border-radius: 8px;
+    color: var(--app-text);
+    display: inline-flex;
+    font-size: 1rem;
+    height: 44px;
+    justify-content: center;
+    padding: 0;
+    transition: background-color 0.18s ease, border-color 0.18s ease;
+    width: 44px;
+}
+
+.practitioner-theme-button:hover {
+    background-color: var(--app-navbar-link-bg-hover);
+    border-color: var(--app-brand);
+}
+
+.practitioner-main {
+    display: grid;
+    gap: 36px;
+    grid-template-columns: minmax(0, 1fr) minmax(360px, 0.95fr);
+    padding: 32px 28px 36px;
+}
+
+.practitioner-form-section h1 {
+    color: var(--app-text);
+    font-size: 1.55rem;
+    margin: 0 0 8px;
+}
+
+.practitioner-intro {
+    color: var(--app-muted);
+    line-height: 1.55;
+    margin: 0 0 26px;
+    max-width: 660px;
+}
+
+.practitioner-form {
+    min-width: 0;
+}
+
+.practitioner-fields-grid {
+    display: grid;
+    gap: 18px;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.practitioner-field {
+    min-width: 0;
+}
+
+.practitioner-field-full {
+    grid-column: 1 / -1;
+}
+
+.practitioner-field .form-label {
+    color: var(--app-text);
+    font-weight: 600;
+    margin-bottom: 7px;
+}
+
+.practitioner-field .form-control,
+.practitioner-field .form-select {
+    background-color: var(--app-input-bg);
+    border-color: var(--app-border);
+    color: var(--app-input-text);
+    min-height: 44px;
+}
+
+.practitioner-field .form-control::placeholder {
+    color: var(--app-input-placeholder);
+    opacity: 1;
+}
+
+.practitioner-field .form-control:focus,
+.practitioner-field .form-select:focus {
+    border-color: var(--app-primary);
+    box-shadow: 0 0 0 0.2rem var(--app-focus-ring);
+}
+
+.practitioner-field .form-text {
+    color: var(--app-muted);
+}
+
+.practitioner-logo-dropzone {
+    align-items: center;
+    background-color: var(--app-surface);
+    border: 1px dashed var(--app-border);
+    border-radius: 8px;
+    color: var(--app-text);
+    cursor: pointer;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    justify-content: center;
+    margin-bottom: 22px;
+    min-height: 178px;
+    padding: 22px;
+    text-align: center;
+    transition:
+        background-color 0.18s ease,
+        border-color 0.18s ease,
+        box-shadow 0.18s ease;
+}
+
+.practitioner-logo-dropzone:hover,
+.practitioner-logo-dropzone.is-dragging {
+    background-color: var(--app-navbar-link-bg-hover);
+    border-color: var(--app-brand);
+}
+
+.practitioner-logo-dropzone:focus-within {
+    border-color: var(--app-primary);
+    box-shadow: 0 0 0 0.2rem var(--app-focus-ring);
+}
+
+.practitioner-logo-dropzone-icon {
+    color: var(--app-primary);
+    font-size: 1.7rem;
+    line-height: 1;
+}
+
+.practitioner-logo-dropzone-title {
+    font-weight: 700;
+}
+
+.practitioner-logo-dropzone-help,
+.practitioner-logo-file-name {
+    color: var(--app-muted);
+    font-size: 0.84rem;
+    line-height: 1.4;
+}
+
+.practitioner-logo-input {
+    color: var(--app-input-text);
+    cursor: pointer;
+    max-width: 360px;
+}
+
+.practitioner-logo-input::file-selector-button {
+    background-color: var(--app-bg);
+    border: 1px solid var(--app-border);
+    border-radius: 6px;
+    color: var(--app-text);
+    cursor: pointer;
+    margin-right: 10px;
+    padding: 7px 10px;
+}
+
+.practitioner-logo-input:hover::file-selector-button {
+    background-color: var(--app-navbar-link-bg-hover);
+    border-color: var(--app-brand);
+}
+
+.practitioner-logo-input:focus {
+    box-shadow: none;
+    outline: none;
+}
+
+.practitioner-form-actions {
+    align-items: center;
+    border-top: 1px solid var(--app-border);
+    display: flex;
+    justify-content: flex-start;
+    margin-top: 26px;
+    padding-top: 20px;
+}
+
+.practitioner-form-actions .btn {
+    align-items: center;
+    display: inline-flex;
+    gap: 7px;
+    min-height: 44px;
+}
+
+.practitioner-preview-section {
+    min-width: 0;
+}
+
+.practitioner-preview-section h2 {
+    color: var(--app-muted);
+    font-family: "Roboto", sans-serif;
+    font-size: 0.9rem;
+    font-weight: 500;
+    margin: 0 0 10px;
+}
+
+.practitioner-document {
+    background-color: var(--app-bg);
+    border: 1px solid var(--app-border);
+    border-radius: 8px;
+    box-shadow: 0 12px 28px rgba(15, 23, 42, 0.08);
+    min-height: 470px;
+    padding: 24px;
+}
+
+.practitioner-document-header {
+    align-items: start;
+    display: grid;
+    gap: 18px;
+    grid-template-columns: 74px minmax(0, 1fr);
+}
+
+.practitioner-document-logo {
+    align-items: center;
+    border: 1px solid var(--app-border);
+    border-radius: 6px;
+    display: flex;
+    height: 66px;
+    justify-content: center;
+    overflow: hidden;
+    width: 74px;
+}
+
+.practitioner-document-logo-image {
+    height: 100%;
+    object-fit: contain;
+    padding: 5px;
+    width: 100%;
+}
+
+.practitioner-document-logo-placeholder {
+    color: var(--app-muted);
+    font-size: 0.72rem;
+    padding: 7px;
+    text-align: center;
+}
+
+.practitioner-document-identity {
+    min-width: 0;
+    text-align: right;
+}
+
+.practitioner-document-identity strong {
+    color: var(--app-text);
+    display: block;
+    font-size: 1rem;
+    overflow-wrap: anywhere;
+}
+
+.practitioner-document-identity p {
+    align-items: center;
+    color: var(--app-muted);
+    display: flex;
+    font-size: 0.78rem;
+    gap: 6px;
+    justify-content: flex-end;
+    margin: 4px 0 0;
+    overflow-wrap: anywhere;
+}
+
+.practitioner-document-rule {
+    background-color: var(--app-brand);
+    height: 2px;
+    margin: 18px 0;
+    width: 100%;
+}
+
+.practitioner-document-details {
+    color: var(--app-muted);
+    font-size: 0.78rem;
+    margin-bottom: 24px;
+    text-align: right;
+}
+
+.practitioner-document-details p {
+    margin: 3px 0;
+    overflow-wrap: anywhere;
+}
+
+.practitioner-document-detail-label {
+    font-weight: 700;
+    margin-right: 5px;
+}
+
+.practitioner-document-content {
+    border-top: 1px solid var(--app-border);
+    padding-top: 22px;
+}
+
+.practitioner-document-content h3 {
+    color: var(--app-text);
+    font-size: 1.15rem;
+    margin: 0 0 14px;
+}
+
+.practitioner-document-lines {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.practitioner-document-lines span {
+    background-color: var(--app-border);
+    border-radius: 4px;
+    display: block;
+    height: 8px;
+    opacity: 0.75;
+    width: 100%;
+}
+
+.practitioner-document-lines span.medium {
+    width: 74%;
+}
+
+.practitioner-document-lines span.short {
+    width: 58%;
+}
+
+html[data-bs-theme="dark"] .practitioner-shell,
+html[data-bs-theme="dark"] .practitioner-document {
+    box-shadow: 0 18px 42px rgba(0, 0, 0, 0.28);
+}
+
+@media (max-width: 991.98px) {
+    .practitioner-header {
+        grid-template-columns: minmax(0, 1fr) 44px;
+    }
+
+    .practitioner-brand {
+        grid-column: 1;
+        grid-row: 1;
+    }
+
+    .practitioner-theme-button {
+        grid-column: 2;
+        grid-row: 1;
+    }
+
+    .practitioner-steps {
+        grid-column: 1 / -1;
+        grid-row: 2;
+    }
+
+    .practitioner-main {
+        grid-template-columns: minmax(0, 1fr);
+    }
+
+    .practitioner-preview-section {
+        max-width: 680px;
+        width: 100%;
+    }
+}
+
+@media (max-width: 575.98px) {
+    .practitioner-space-page {
+        padding: 0;
+    }
+
+    .practitioner-shell {
+        border-left: 0;
+        border-radius: 0;
+        border-right: 0;
+        min-height: 100vh;
+    }
+
+    .practitioner-header {
+        gap: 16px;
+        padding: 16px;
+    }
+
+    .practitioner-steps {
+        gap: 6px;
+    }
+
+    .practitioner-step {
+        align-items: flex-start;
+        flex-direction: column;
+        font-size: 0.76rem;
+        justify-content: flex-start;
+        min-height: 72px;
+        padding: 8px;
+        text-align: left;
+    }
+
+    .practitioner-main {
+        gap: 30px;
+        padding: 24px 16px 30px;
+    }
+
+    .practitioner-fields-grid {
+        grid-template-columns: minmax(0, 1fr);
+    }
+
+    .practitioner-field-full {
+        grid-column: auto;
+    }
+
+    .practitioner-logo-dropzone {
+        padding: 18px 12px;
+    }
+
+    .practitioner-logo-input {
+        max-width: 100%;
+        width: 100%;
+    }
+
+    .practitioner-document {
+        min-height: 420px;
+        padding: 18px;
+    }
+
+    .practitioner-document-header {
+        gap: 12px;
+        grid-template-columns: 66px minmax(0, 1fr);
+    }
+
+    .practitioner-document-logo {
+        height: 60px;
+        width: 66px;
+    }
+}

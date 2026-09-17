@@ -1,0 +1,15 @@
+Options -Indexes
+
+<FilesMatch "(?i)\.(php[0-9]*|phtml|phar|cgi|pl|py|sh|bash|zsh|ksh|exe|dll|bat|cmd|com|msi|jar|jsp|asp|aspx)(\.|$)">
+    Require all denied
+</FilesMatch>
+
+<IfModule mod_mime.c>
+    RemoveHandler .php .php0 .php1 .php2 .php3 .php4 .php5 .php6 .php7 .php8
+    RemoveHandler .phtml .phar .cgi .pl .py .sh .bash .zsh .ksh
+    RemoveHandler .exe .dll .bat .cmd .com .msi .jar .jsp .asp .aspx
+
+    RemoveType .php .php0 .php1 .php2 .php3 .php4 .php5 .php6 .php7 .php8
+    RemoveType .phtml .phar .cgi .pl .py .sh .bash .zsh .ksh
+    RemoveType .exe .dll .bat .cmd .com .msi .jar .jsp .asp .aspx
+</IfModule>

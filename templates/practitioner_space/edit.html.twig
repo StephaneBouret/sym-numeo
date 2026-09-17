@@ -1,0 +1,423 @@
+{% extends 'practitioner_space/layout.html.twig' %}
+
+{% block title %}
+    Votre charte | {{ appName }}
+{% endblock %}
+
+{% block practitioner_body %}
+    {% set professionalLogo = professionalProfile
+        ? professionalProfile.logo
+        : null
+    %}
+    {% set logoPath = resolvedIdentity.logoImageName and professionalLogo
+        ? vich_uploader_asset(professionalLogo, 'imageFile')
+        : null
+    %}
+    {% set logoStatusId = form.logo.imageFile.vars.id ~ '_status' %}
+    {% set logoClass = form.logo.imageFile.vars.attr.class|default('') %}
+
+    <main
+        class="practitioner-space-page"
+        data-controller="professional-preview theme"
+        data-professional-preview-name-fallback-value="{{ fallbackIdentity.name }}"
+        data-professional-preview-legal-name-fallback-value="{{ fallbackIdentity.legalName ?? '' }}"
+        data-professional-preview-siret-fallback-value="{{ fallbackIdentity.siret ?? '' }}"
+        data-professional-preview-email-fallback-value="{{ fallbackIdentity.email }}"
+        data-professional-preview-phone-fallback-value="{{ fallbackIdentity.phone ?? '' }}"
+        data-professional-preview-address-fallback-value="{{ fallbackIdentity.address ?? '' }}"
+        data-professional-preview-postal-code-fallback-value="{{ fallbackIdentity.postalCode ?? '' }}"
+        data-professional-preview-city-fallback-value="{{ fallbackIdentity.city ?? '' }}"
+        data-professional-preview-website-url-fallback-value="{{ fallbackIdentity.websiteUrl ?? '' }}"
+        data-professional-preview-logo-value="{{ logoPath ?? '' }}"
+        data-professional-preview-delete-logo-url-value="{{ path('app_practitioner_space_logo_delete') }}"
+        data-professional-preview-delete-logo-token-value="{{ csrf_token('delete-professional-logo-' ~ app.user.id) }}"
+    >
+        <div class="practitioner-shell">
+            <header class="practitioner-header">
+                <a class="practitioner-brand" href="{{ path('app_home') }}">
+                    <img src="{{ asset('img/logo.png') }}" alt="">
+                    <span>{{ appName }}</span>
+                </a>
+
+                <ol class="practitioner-steps" aria-label="Progression">
+                    <li class="practitioner-step active" aria-current="step">
+                        <span class="practitioner-step-number">1</span>
+                        <span>Votre charte</span>
+                    </li>
+                    <li class="practitioner-step">
+                        <span class="practitioner-step-number">2</span>
+                        <span>Votre premier dossier</span>
+                    </li>
+                    <li class="practitioner-step">
+                        <span class="practitioner-step-number">3</span>
+                        <span>Votre premier document</span>
+                    </li>
+                </ol>
+
+                <button
+                    type="button"
+                    class="practitioner-theme-button"
+                    aria-label="Basculer le thème"
+                    title="Basculer le thème"
+                    data-action="theme#toggle"
+                    data-theme-target="button"
+                >
+                    <i
+                        class="bi bi-moon-stars"
+                        data-theme-target="icon"
+                        aria-hidden="true"
+                    ></i>
+                </button>
+            </header>
+
+            <div class="practitioner-main">
+                <section class="practitioner-form-section" aria-labelledby="charter-title">
+                    <h1 id="charter-title">Vos documents, à votre nom</h1>
+                    <p class="practitioner-intro">
+                        Les documents enregistrés utiliseront votre identité professionnelle.
+                        Les champs laissés vides reprendront les informations de votre profil.
+                    </p>
+
+                    {{ form_start(form, {
+                        'attr': {
+                            'class': 'practitioner-form'
+                        }
+                    }) }}
+
+                    {{ form_errors(form) }}
+
+                    <div class="practitioner-field practitioner-field-full">
+                        <label
+                            class="practitioner-logo-dropzone"
+                            for="{{ form.logo.imageFile.vars.id }}"
+                            data-professional-preview-target="dropzone"
+                            data-action="
+                                dragenter->professional-preview#dragOver
+                                dragover->professional-preview#dragOver
+                                dragleave->professional-preview#dragLeave
+                                drop->professional-preview#dropLogo
+                            "
+                        >
+                            <span class="practitioner-logo-dropzone-icon" aria-hidden="true">
+                                <i class="bi bi-image"></i>
+                            </span>
+
+                            <span class="practitioner-logo-dropzone-title">
+                                Votre logo professionnel
+                            </span>
+
+                            <span class="practitioner-logo-dropzone-help">
+                                PNG, JPEG ou WebP, 2 Mo maximum
+                            </span>
+
+                            {{ form_widget(form.logo.imageFile, {
+                                'attr': form.logo.imageFile.vars.attr|merge({
+                                    'class': (logoClass ~ ' practitioner-logo-input')|trim,
+                                    'aria-describedby': logoStatusId,
+                                    'data-professional-preview-target': 'logoInput',
+                                    'data-action': 'change->professional-preview#changeLogo'
+                                })
+                            }) }}
+
+                            <span
+                                id="{{ logoStatusId }}"
+                                class="practitioner-logo-file-name"
+                                aria-live="polite"
+                                data-professional-preview-target="logoFileName"
+                            >
+                                {% if logoPath %}
+                                    Logo actuel conservé tant qu'aucun nouveau fichier n'est choisi.
+                                {% else %}
+                                    Aucun fichier sélectionné.
+                                {% endif %}
+                            </span>
+                        </label>
+
+                        {{ form_errors(form.logo.imageFile) }}
+                    </div>
+
+                    <div
+                        class="mb-2"
+                        data-professional-preview-target="deleteLogoSection"
+                        {% if not logoPath %}hidden{% endif %}
+                    >
+                        <button
+                            type="button"
+                            class="btn btn-outline-danger btn-sm"
+                            aria-describedby="professional-logo-delete-status"
+                            data-professional-preview-target="deleteLogoButton"
+                            data-action="professional-preview#deleteLogo"
+                        >
+                            <i
+                                class="bi bi-trash3 me-1"
+                                aria-hidden="true"
+                            ></i>
+                            Supprimer le logo actuel
+                        </button>
+                    </div>
+
+                    <p
+                        id="professional-logo-delete-status"
+                        class="small mb-4"
+                        role="status"
+                        aria-live="polite"
+                        data-professional-preview-target="deleteLogoStatus"
+                        hidden
+                    ></p>
+
+                    <div class="practitioner-fields-grid">
+                        <div class="practitioner-field practitioner-field-full">
+                            {{ form_label(form.professionalName) }}
+                            {{ form_widget(form.professionalName, {
+                                'attr': form.professionalName.vars.attr|merge({
+                                    'data-professional-preview-target': 'professionalNameInput',
+                                    'data-action': 'input->professional-preview#update'
+                                })
+                            }) }}
+                            {{ form_errors(form.professionalName) }}
+                            {{ form_help(form.professionalName) }}
+                        </div>
+
+                        <div class="practitioner-field">
+                            {{ form_label(form.legalName) }}
+                            {{ form_widget(form.legalName, {
+                                'attr': form.legalName.vars.attr|merge({
+                                    'data-professional-preview-target': 'legalNameInput',
+                                    'data-action': 'input->professional-preview#update'
+                                })
+                            }) }}
+                            {{ form_errors(form.legalName) }}
+                            {{ form_help(form.legalName) }}
+                        </div>
+
+                        <div class="practitioner-field">
+                            {{ form_label(form.siret) }}
+                            {{ form_widget(form.siret, {
+                                'attr': form.siret.vars.attr|merge({
+                                    'data-professional-preview-target': 'siretInput',
+                                    'data-action': 'input->professional-preview#update'
+                                })
+                            }) }}
+                            {{ form_errors(form.siret) }}
+                            {{ form_help(form.siret) }}
+                        </div>
+
+                        <div class="practitioner-field">
+                            {{ form_label(form.email) }}
+                            {{ form_widget(form.email, {
+                                'attr': form.email.vars.attr|merge({
+                                    'data-professional-preview-target': 'emailInput',
+                                    'data-action': 'input->professional-preview#update'
+                                })
+                            }) }}
+                            {{ form_errors(form.email) }}
+                            {{ form_help(form.email) }}
+                        </div>
+
+                        <div class="practitioner-field">
+                            {{ form_label(form.phone) }}
+                            {{ form_widget(form.phone, {
+                                'attr': form.phone.vars.attr|merge({
+                                    'data-professional-preview-target': 'phoneInput',
+                                    'data-action': 'input->professional-preview#update'
+                                })
+                            }) }}
+                            {{ form_errors(form.phone) }}
+                            {{ form_help(form.phone) }}
+                        </div>
+
+                        <div class="practitioner-field practitioner-field-full">
+                            {{ form_label(form.address) }}
+                            {{ form_widget(form.address, {
+                                'attr': form.address.vars.attr|merge({
+                                    'data-professional-preview-target': 'addressInput',
+                                    'data-action': 'input->professional-preview#update'
+                                })
+                            }) }}
+                            {{ form_errors(form.address) }}
+                            {{ form_help(form.address) }}
+                        </div>
+
+                        <div class="practitioner-field">
+                            {{ form_label(form.postalCode) }}
+                            {{ form_widget(form.postalCode, {
+                                'attr': form.postalCode.vars.attr|merge({
+                                    'data-professional-preview-target': 'postalCodeInput',
+                                    'data-action': 'input->professional-preview#update'
+                                })
+                            }) }}
+                            {{ form_errors(form.postalCode) }}
+                            {{ form_help(form.postalCode) }}
+                        </div>
+
+                        <div class="practitioner-field">
+                            {{ form_label(form.city) }}
+                            {{ form_widget(form.city, {
+                                'attr': form.city.vars.attr|merge({
+                                    'data-professional-preview-target': 'cityInput',
+                                    'data-action': 'input->professional-preview#update'
+                                })
+                            }) }}
+                            {{ form_errors(form.city) }}
+                            {{ form_help(form.city) }}
+                        </div>
+
+                        <div class="practitioner-field practitioner-field-full">
+                            {{ form_label(form.websiteUrl) }}
+                            {{ form_widget(form.websiteUrl, {
+                                'attr': form.websiteUrl.vars.attr|merge({
+                                    'data-professional-preview-target': 'websiteUrlInput',
+                                    'data-action': 'input->professional-preview#update'
+                                })
+                            }) }}
+                            {{ form_errors(form.websiteUrl) }}
+                            {{ form_help(form.websiteUrl) }}
+                        </div>
+                    </div>
+
+                    <div class="practitioner-form-actions">
+                        <button type="submit" class="btn btn-primary">
+                            <i class="bi bi-check-lg" aria-hidden="true"></i>
+                            Enregistrer
+                        </button>
+                    </div>
+
+                    {{ form_end(form) }}
+                </section>
+
+                <aside class="practitioner-preview-section" aria-labelledby="preview-title">
+                    <h2 id="preview-title">
+                        Aperçu — un extrait de vos futurs documents
+                    </h2>
+
+                    <div class="practitioner-document">
+                        <div class="practitioner-document-header">
+                            <div class="practitioner-document-logo">
+                                <img
+                                    class="practitioner-document-logo-image"
+                                    alt="Logo professionnel"
+                                    data-professional-preview-target="logoImage"
+                                    {% if logoPath %}
+                                        src="{{ logoPath }}"
+                                    {% else %}
+                                        hidden
+                                    {% endif %}
+                                >
+
+                                <span
+                                    class="practitioner-document-logo-placeholder"
+                                    data-professional-preview-target="logoPlaceholder"
+                                    {% if logoPath %}hidden{% endif %}
+                                >
+                                    Votre logo
+                                </span>
+                            </div>
+
+                            <div class="practitioner-document-identity">
+                                <strong data-professional-preview-target="nameOutput">
+                                    {{ resolvedIdentity.name }}
+                                </strong>
+
+                                <p
+                                    data-professional-preview-target="legalNameRow"
+                                    {% if resolvedIdentity.legalName is empty %}hidden{% endif %}
+                                >
+                                    <span>Raison sociale</span>
+                                    <span data-professional-preview-target="legalNameOutput">
+                                        {{ resolvedIdentity.legalName }}
+                                    </span>
+                                </p>
+
+                                <p
+                                    data-professional-preview-target="emailRow"
+                                    {% if resolvedIdentity.email is empty %}hidden{% endif %}
+                                >
+                                    <i class="bi bi-envelope" aria-hidden="true"></i>
+                                    <span data-professional-preview-target="emailOutput">
+                                        {{ resolvedIdentity.email }}
+                                    </span>
+                                </p>
+
+                                <p
+                                    data-professional-preview-target="phoneRow"
+                                    {% if resolvedIdentity.phone is empty %}hidden{% endif %}
+                                >
+                                    <i class="bi bi-telephone" aria-hidden="true"></i>
+                                    <span data-professional-preview-target="phoneOutput">
+                                        {{ resolvedIdentity.phone }}
+                                    </span>
+                                </p>
+
+                                <p
+                                    data-professional-preview-target="websiteUrlRow"
+                                    {% if resolvedIdentity.websiteUrl is empty %}hidden{% endif %}
+                                >
+                                    <i class="bi bi-globe2" aria-hidden="true"></i>
+                                    <span data-professional-preview-target="websiteUrlOutput">
+                                        {{ resolvedIdentity.websiteUrl }}
+                                    </span>
+                                </p>
+                            </div>
+                        </div>
+
+                        <div class="practitioner-document-rule"></div>
+
+                        <div class="practitioner-document-details">
+                            <p
+                                data-professional-preview-target="siretRow"
+                                {% if resolvedIdentity.siret is empty %}hidden{% endif %}
+                            >
+                                <span class="practitioner-document-detail-label">SIRET</span>
+                                <span data-professional-preview-target="siretOutput">
+                                    {{ resolvedIdentity.siret }}
+                                </span>
+                            </p>
+
+                            <p
+                                data-professional-preview-target="addressRow"
+                                {% if resolvedIdentity.address is empty %}hidden{% endif %}
+                            >
+                                <span data-professional-preview-target="addressOutput">
+                                    {{ resolvedIdentity.address }}
+                                </span>
+                            </p>
+
+                            <div class="d-flex flex-wrap justify-content-end gap-1">
+                                <p
+                                    data-professional-preview-target="postalCodeRow"
+                                    {% if resolvedIdentity.postalCode is empty %}hidden{% endif %}
+                                >
+                                    <span data-professional-preview-target="postalCodeOutput">
+                                        {{ resolvedIdentity.postalCode }}
+                                    </span>
+                                </p>
+
+                                <p
+                                    data-professional-preview-target="cityRow"
+                                    {% if resolvedIdentity.city is empty %}hidden{% endif %}
+                                >
+                                    <span data-professional-preview-target="cityOutput">
+                                        {{ resolvedIdentity.city }}
+                                    </span>
+                                </p>
+                            </div>
+
+                        </div>
+
+                        <div class="practitioner-document-content">
+                            <h3>CAP des Nombres</h3>
+
+                            <div class="practitioner-document-lines" aria-hidden="true">
+                                <span></span>
+                                <span></span>
+                                <span class="short"></span>
+                                <span></span>
+                                <span class="medium"></span>
+                            </div>
+                        </div>
+                    </div>
+                </aside>
+            </div>
+        </div>
+    </main>
+{% endblock %}

@@ -26,7 +26,10 @@
 ###< liip/imagine-bundle ###
 
 ###> uploaded images ###
-/public/images/avatars/
+/public/images/avatars/*
+!/public/images/avatars/.htaccess
+/public/images/professional-logos/*
+!/public/images/professional-logos/.htaccess
 ###< uploaded images ###
 
 ###> friendsofphp/php-cs-fixer ###

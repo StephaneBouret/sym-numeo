@@ -186,6 +186,28 @@ class SubscriptionRepository extends ServiceEntityRepository
         return null;
     }
 
+    public function findActiveForUser(User $user): ?Subscription
+    {
+        $subscriptions = $this->createQueryBuilder('s')
+            ->andWhere('s.user = :user')
+            ->andWhere('s.status = :status')
+            ->setParameter('user', $user)
+            ->setParameter('status', SubscriptionStatus::ACTIVE)
+            ->orderBy('s.isLifetime', 'DESC')
+            ->addOrderBy('s.endsAt', 'DESC')
+            ->addOrderBy('s.id', 'DESC')
+            ->getQuery()
+            ->getResult();
+
+        foreach ($subscriptions as $subscription) {
+            if ($subscription->isActive()) {
+                return $subscription;
+            }
+        }
+
+        return null;
+    }
+
     //    /**
     //     * @return Subscription[] Returns an array of Subscription objects
     //     */

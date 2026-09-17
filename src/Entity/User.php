@@ -144,6 +144,9 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface, TwoFact
     #[ORM\OneToOne(mappedBy: 'user', cascade: ['persist', 'remove'])]
     private ?Avatar $avatar = null;
 
+    #[ORM\OneToOne(mappedBy: 'user', cascade: ['persist', 'remove'])]
+    private ?ProfessionalProfile $professionalProfile = null;
+
     /**
      * @var Collection<int, UserDevice>
      */
@@ -362,8 +365,10 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface, TwoFact
     public function __serialize(): array
     {
         $data = (array) $this;
+        unset($data["\0" . self::class . "\0professionalProfile"]);
+
         if (null !== $this->password) {
-            $data["\0".self::class."\0password"] = hash('crc32c', $this->password);
+            $data["\0" . self::class . "\0password"] = hash('crc32c', $this->password);
         }
 
         return $data;
@@ -513,6 +518,26 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface, TwoFact
         }
 
         $this->avatar = $avatar;
+
+        return $this;
+    }
+
+    public function getProfessionalProfile(): ?ProfessionalProfile
+    {
+        return $this->professionalProfile;
+    }
+
+    public function setProfessionalProfile(?ProfessionalProfile $professionalProfile): static
+    {
+        if (null === $professionalProfile && null !== $this->professionalProfile) {
+            $this->professionalProfile->setUser(null);
+        }
+
+        if (null !== $professionalProfile && $professionalProfile->getUser() !== $this) {
+            $professionalProfile->setUser($this);
+        }
+
+        $this->professionalProfile = $professionalProfile;
 
         return $this;
     }

@@ -5,9 +5,16 @@ vich_uploader:
         type: attribute
 
     mappings:
-       avatars_images:
-           uri_prefix: /images/avatars
-           upload_destination: '%kernel.project_dir%/public/images/avatars'
-           namer: Vich\UploaderBundle\Naming\SmartUniqueNamer
-           delete_on_update: true
-           delete_on_remove: true
+        avatars_images:
+            uri_prefix: /images/avatars
+            upload_destination: '%kernel.project_dir%/public/images/avatars'
+            namer: Vich\UploaderBundle\Naming\SmartUniqueNamer
+            delete_on_update: true
+            delete_on_remove: true
+
+        professional_logos:
+            uri_prefix: /images/professional-logos
+            upload_destination: '%kernel.project_dir%/public/images/professional-logos'
+            namer: Vich\UploaderBundle\Naming\SmartUniqueNamer
+            delete_on_update: true
+            delete_on_remove: true

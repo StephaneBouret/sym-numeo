@@ -15,6 +15,7 @@ final class UserProfileService
         private readonly EntityManagerInterface $em,
         private readonly UserPasswordHasherInterface $passwordHasher,
         private readonly AvatarService $avatarService,
+        private readonly ProfessionalProfileService $professionalProfileService,
     ) {
     }
 
@@ -98,6 +99,8 @@ final class UserProfileService
         if (null !== $avatar) {
             $this->avatarService->deleteAvatar($avatar);
         }
+
+        $this->professionalProfileService->deleteForUser($user, false);
     }
 
     private function revokeDevices(User $user): void

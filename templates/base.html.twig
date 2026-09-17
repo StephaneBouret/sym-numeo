@@ -20,19 +20,23 @@
         {% endblock %}
     </head>
     <body>
-        {% include "shared/_navbar.html.twig" %}
+        {% block navbar %}
+            {% include "shared/_navbar.html.twig" %}
+        {% endblock %}
         {% include "partials/_flash.html.twig" %}
         {% block body %}
         {% endblock %}
 
-        <a
-            href="#"
-            class="back-to-top d-flex align-items-center justify-content-center"
-            data-controller="back-to-top"
-            data-action="click->back-to-top#scrollToTop"
-            aria-label="Retour en haut"
-        >
-            <i class="bi bi-arrow-up-short"></i>
-        </a>
+        {% block back_to_top %}
+            <a
+                href="#"
+                class="back-to-top d-flex align-items-center justify-content-center"
+                data-controller="back-to-top"
+                data-action="click->back-to-top#scrollToTop"
+                aria-label="Retour en haut"
+            >
+                <i class="bi bi-arrow-up-short"></i>
+            </a>
+        {% endblock %}
     </body>
 </html>

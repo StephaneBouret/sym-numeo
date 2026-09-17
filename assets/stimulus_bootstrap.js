@@ -10,6 +10,7 @@ import TogglePasswordController from './controllers/toggle_password_controller.j
 import AvatarUploadController from './controllers/avatar_upload_controller.js';
 import DeleteAccountController from './controllers/delete_account_controller.js';
 import ProfileEmailIdentifierController from './controllers/profile_email_identifier_controller.js';
+import ProfessionalPreviewController from './controllers/professional_preview_controller.js';
 
 const app = startStimulusApp();
 // register any custom, 3rd party controllers here
@@ -25,3 +26,4 @@ app.register('toggle-password', TogglePasswordController);
 app.register('avatar-upload', AvatarUploadController);
 app.register('delete-account', DeleteAccountController);
 app.register('profile-email-identifier', ProfileEmailIdentifierController);
+app.register('professional-preview', ProfessionalPreviewController);
